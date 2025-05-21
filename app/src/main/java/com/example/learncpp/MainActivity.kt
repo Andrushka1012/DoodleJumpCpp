@@ -1,22 +1,31 @@
 package com.example.learncpp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
-import com.example.learncpp.databinding.ActivityMainBinding
+import androidx.activity.ComponentActivity
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.tooling.preview.Preview
 
-class MainActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityMainBinding
-
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        // Example of a call to a native method
-        binding.sampleText.text = stringFromJNI()
+        setContentView(ComposeView(this).apply {
+            setContent {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    MainScreen(stringFromJNI())
+                }
+            }
+        })
     }
 
     /**
@@ -30,5 +39,24 @@ class MainActivity : AppCompatActivity() {
         init {
             System.loadLibrary("learncpp")
         }
+    }
+}
+
+@Composable
+fun MainScreen(nativeText: String) {
+    Column {
+        Text(text = "Native text from C++: in Compose")
+        Text(text = nativeText)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
+    ) {
+        MainScreen("Preview C++ text")
     }
 }
