@@ -25,6 +25,10 @@ namespace Engine {
         
         [[nodiscard]] bool isInitialized() const { return isValid; }
         
+        void setTransform(float x, float y, float scaleX = 1.0f, float scaleY = 1.0f);
+        void resetTransform();
+        void renderTriangles();
+        
     private:
         GLuint createShader(unsigned int shaderType, const char* source) const;
         GLuint createShaderProgram();
@@ -35,6 +39,7 @@ namespace Engine {
         GLuint shaderProgram = 0;
         GLuint vertexBuffer = 0;
         GLuint positionAttribute = 0;
+        GLuint transformUniform = 0;
         bool isValid = false;
         
         static constexpr int VERTEX_COUNT = 6;
