@@ -275,14 +275,15 @@ namespace DoodleJumpGame {
         
         // Матрица: Scale * Rotation * Translation
         float transform[16] = {
-            cosR * scaleX,  sinR * scaleX,  0.0f, 0.0f,  // Rotation + Scale X
-           -sinR * scaleY,  cosR * scaleY,  0.0f, 0.0f,  // Rotation + Scale Y
-            0.0f,           0.0f,           1.0f, 0.0f,  // Z axis
-            x,              y,              0.0f, 1.0f   // Translation
+            cosR * scaleX,  sinR * scaleX,  0.0f, 0.0f,
+           -sinR * scaleY,  cosR * scaleY,  0.0f, 0.0f,
+            0.0f,           0.0f,           1.0f, 0.0f,
+            x,              y,              0.0f, 1.0f
         };
         
         glUseProgram(shaderProgram);
         glUniformMatrix4fv(transformUniform, 1, GL_FALSE, transform);
+
     }
     
     void Renderer::resetTransform() {

@@ -9,7 +9,6 @@ namespace DoodleJumpGame {
         Player(float startX, float startY)
                 : Renderable(startX, startY, 32.0f, 32.0f) {}
 
-        // Реализуем интерфейс
         void renderOn(Renderer *render) override;
 
         void update(float deltaTime) override;
