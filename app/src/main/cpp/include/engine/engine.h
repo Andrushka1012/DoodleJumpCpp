@@ -2,6 +2,7 @@
 
 #include "renderer.h"
 #include "memory"
+#include "player.h"
 
 namespace DoodleJumpGame {
     class Engine {
@@ -16,6 +17,9 @@ namespace DoodleJumpGame {
 
     private:
         std::unique_ptr<Renderer> renderer;
+        std::unique_ptr<Player> player;
+
+        void initializeGame();
     };
 
     // C-style API for JNI compatibility
