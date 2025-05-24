@@ -16,10 +16,13 @@ namespace DoodleJumpGame {
         void setViewport(int width, int height);
 
     private:
+        static constexpr float Y_NORMALIZE_THRESHOLD = 10000.0f;
+
         std::unique_ptr<Renderer> renderer;
         std::unique_ptr<Player> player;
 
         void initializeGame();
+        void normalizeYPosition();
     };
 
     // C-style API for JNI compatibility
@@ -28,4 +31,5 @@ namespace DoodleJumpGame {
     void drawFrame();
 
     void setViewport(int width, int height);
+
 } 

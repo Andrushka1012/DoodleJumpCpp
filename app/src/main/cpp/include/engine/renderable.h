@@ -26,13 +26,25 @@ protected:
     Renderable(float x, float y, float width, float height)
             : x(x), y(y), width(width), height(height) {}
 
-    void setX(float newX) {
+    void setXWithScreenWrap(float newX) {
         if (newX < -1.0f) {
             x = 1.0f;
         } else if (newX > 1.0f) {
             x = -1.0f;
+        } else {
+            x = newX;
         }
-    };
+    }
+
+    void setXWithBoundaryClamp(float newX) {
+        if (newX < -1.0f) {
+            x = -1.0f;
+        } else if (newX > 1.0f) {
+            x = 1.0f;
+        } else {
+            x = newX;
+        }
+    }
 
     void setY(float newY) {
         y = newY;
