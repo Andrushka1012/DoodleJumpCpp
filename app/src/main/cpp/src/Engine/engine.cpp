@@ -14,9 +14,15 @@ namespace DoodleJumpGame {
     Engine::~Engine() = default; // Or define custom cleanup logic if necessary
 
     void Engine::start() {
-        if (renderer) {
-            renderer->initialize();
+        if (!renderer || renderer->initialize()) {
+            // TODO: Handle render initialization failure
+            return;
         }
+        initializeGame();
+    }
+
+    void Engine::initializeGame() {
+        player = std::make_unique<Player>(0.0f, 0.0f);
     }
 
     void Engine::setViewport(int width, int height) {
@@ -27,6 +33,7 @@ namespace DoodleJumpGame {
 
     void Engine::drawFrame() {
         // TODO: Game logic here
+
         if (renderer) {
             renderer->render();
         }
