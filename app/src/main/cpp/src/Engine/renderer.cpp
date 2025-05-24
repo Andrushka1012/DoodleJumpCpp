@@ -3,14 +3,16 @@
 #include <android/log.h>
 #include <array>
 #include <memory>
+#include <cmath>
 
 namespace Engine {
 
     namespace {
         constexpr const char *VERTEX_SHADER_SOURCE = R"(
             attribute vec4 position;
+            uniform mat4 u_transform;
             void main() {
-                gl_Position = position;
+                gl_Position = u_transform * position;
             }
         )";
 
@@ -41,8 +43,7 @@ namespace Engine {
             __android_log_print(ANDROID_LOG_INFO, "Engine::Renderer", "%s", message);
         }
 
-        // Global renderer instance for JNI compatibility
-        std::unique_ptr<Renderer> g_renderer;
+
     }
 
     Renderer::~Renderer() {
@@ -97,6 +98,13 @@ namespace Engine {
             return false;
         }
 
+        transformUniform = glGetUniformLocation(shaderProgram, "u_transform");
+        if (transformUniform == static_cast<GLuint>(-1)) {
+            logError("Failed to get transform uniform location");
+            cleanup();
+            return false;
+        }
+
         createVertexBuffer();
         if (vertexBuffer == 0) {
             logError("Failed to create vertex buffer");
@@ -126,22 +134,37 @@ namespace Engine {
 
     void Renderer::render() {
         if (!isValid) {
-            logError("Cannot render: renderer not initialized");
+            logError("Cannot renderOn: renderer not initialized");
             return;
         }
 
         glClear(GL_COLOR_BUFFER_BIT);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-        glUseProgram(shaderProgram);
+        // Счетчик кадров для анимации
+        static float frameCount = 0.0f;
+        frameCount += 1.0f;
+        
+        // Вычисляем углы поворота
+        float rotation1 = frameCount * 2.0f;        // Быстрое вращение
+        float rotation2 = frameCount * 1.0f;        // Среднее вращение  
+        float rotation3 = frameCount * 0.5f;        // Медленное вращение
 
-        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-        glEnableVertexAttribArray(positionAttribute);
-        glVertexAttribPointer(positionAttribute, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+        // Рисуем три вращающихся объекта
+        setTransform(0.0f, 0.0f, 0.5f, 0.5f, rotation1);
+        renderTriangles();
+        
+        setTransform(-0.6f, 0.0f, 0.3f, 0.3f, rotation2);
+        renderTriangles();
+        
+        setTransform(0.6f, 0.0f, 0.3f, 0.3f, rotation3);
+        renderTriangles();
 
-        glDrawArrays(GL_TRIANGLES, 0, VERTEX_COUNT);
+        setTransform(0.0f, 0.5f, 0.3f, 0.3f, rotation1);
+        renderTriangles();
 
-        glDisableVertexAttribArray(positionAttribute);
+        setTransform(0.0f, -0.5f, 0.3f, 0.3f, rotation1);
+        renderTriangles();
     }
 
     void Renderer::setViewport(int width, int height) {
@@ -242,28 +265,52 @@ namespace Engine {
         return true;
     }
 
-    // C-style API implementation
-    void initRenderer() {
-        if (!g_renderer) {
-            g_renderer = std::make_unique<Renderer>();
-        }
-        g_renderer->initialize();
+    void Renderer::setTransform(float x, float y, float scaleX, float scaleY, float rotation) {
+        if (!isValid) return;
+        
+        // Преобразуем градусы в радианы
+        float radians = rotation * M_PI / 180.0f;
+        float cosR = cos(radians);
+        float sinR = sin(radians);
+        
+        // Матрица: Scale * Rotation * Translation
+        float transform[16] = {
+            cosR * scaleX,  sinR * scaleX,  0.0f, 0.0f,  // Rotation + Scale X
+           -sinR * scaleY,  cosR * scaleY,  0.0f, 0.0f,  // Rotation + Scale Y
+            0.0f,           0.0f,           1.0f, 0.0f,  // Z axis
+            x,              y,              0.0f, 1.0f   // Translation
+        };
+        
+        glUseProgram(shaderProgram);
+        glUniformMatrix4fv(transformUniform, 1, GL_FALSE, transform);
     }
-
-    void renderFrame() {
-        if (g_renderer) {
-            g_renderer->render();
-        }
+    
+    void Renderer::resetTransform() {
+        if (!isValid) return;
+        
+        // Единичная матрица (без трансформации)
+        float identity[16] = {
+            1.0f, 0.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 0.0f, 0.0f,
+            0.0f, 0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 0.0f, 1.0f
+        };
+        
+        glUseProgram(shaderProgram);
+        glUniformMatrix4fv(transformUniform, 1, GL_FALSE, identity);
     }
-
-    void setViewport(int width, int height) {
-        if (g_renderer) {
-            g_renderer->setViewport(width, height);
-        }
-    }
-
-    void cleanupRenderer() {
-        g_renderer.reset();
+    
+    void Renderer::renderTriangles() const {
+        if (!isValid) return;
+        
+        glUseProgram(shaderProgram);
+        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+        glEnableVertexAttribArray(positionAttribute);
+        glVertexAttribPointer(positionAttribute, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+        
+        glDrawArrays(GL_TRIANGLES, 0, VERTEX_COUNT);
+        
+        glDisableVertexAttribArray(positionAttribute);
     }
 
 } // namespace Engine 

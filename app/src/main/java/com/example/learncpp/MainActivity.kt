@@ -30,11 +30,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    /**
-     * A native method that is implemented by the 'DoodleJumpCpp' native library,
-     * which is packaged with this application.
-     */
-    external fun stringFromJNI(): String
     external fun initRenderer()
     external fun renderFrame()
     external fun setViewport(width: Int, height: Int)

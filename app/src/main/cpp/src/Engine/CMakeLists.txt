@@ -1,6 +1,8 @@
 add_library(Engine STATIC 
         engine.cpp
-        renderer.cpp)
+        renderer.cpp
+        player.cpp
+)
 
 target_include_directories(Engine PUBLIC ../../include)
 

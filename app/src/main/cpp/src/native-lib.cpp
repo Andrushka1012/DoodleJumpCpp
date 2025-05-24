@@ -9,21 +9,11 @@
 
 using std::string;
 
-extern "C" JNIEXPORT jstring JNICALL
-Java_com_example_learncpp_MainActivity_stringFromJNI(
-        JNIEnv* env,
-        jobject /* this */) {
-
-    int result = Engine::sum(5, 10);
-    string message = "Hello Doodle! Sum: " + std::to_string(result);
-    return env->NewStringUTF(message.c_str());
-}
-
 extern "C" JNIEXPORT void JNICALL
 Java_com_example_learncpp_MainActivity_initRenderer(
         JNIEnv* env,
         jobject /* this */) {
-    Engine::initRenderer();
+    Engine::startEngine();
 }
 
 extern "C" JNIEXPORT void JNICALL

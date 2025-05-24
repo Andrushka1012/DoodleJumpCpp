@@ -25,9 +25,9 @@ namespace Engine {
         
         [[nodiscard]] bool isInitialized() const { return isValid; }
         
-        void setTransform(float x, float y, float scaleX = 1.0f, float scaleY = 1.0f);
+        void setTransform(float x, float y, float scaleX = 1.0f, float scaleY = 1.0f, float rotation = 0.0f);
         void resetTransform();
-        void renderTriangles();
+        void renderTriangles() const;
         
     private:
         GLuint createShader(unsigned int shaderType, const char* source) const;
@@ -44,11 +44,5 @@ namespace Engine {
         
         static constexpr int VERTEX_COUNT = 6;
     };
-    
-    // C-style API for JNI compatibility
-    void initRenderer();
-    void renderFrame(); 
-    void setViewport(int width, int height);
-    void cleanupRenderer();
     
 } // namespace Engine 
