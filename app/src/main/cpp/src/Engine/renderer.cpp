@@ -21,11 +21,16 @@ namespace Engine {
             }
         )";
 
-        constexpr std::array<float, 10> RECTANGLE_VERTICES = {
-                -0.5f, -0.5f,  // Bottom left
-                0.5f, -0.5f,  // Bottom right
-                0.5f, 0.5f,   // Top right
-                -0.5f, 0.5f,  // Top left
+        constexpr std::array<float, 12> TRIANGLE_VERTICES = {
+                // Первый треугольник (нижний)
+                -0.9f, -0.9f,  // Левый нижний
+                 0.9f, -0.9f,  // Правый нижний  
+                 0.0f,  0.0f,  // Центр
+                
+                // Второй треугольник (верхний)
+                -0.9f,  0.9f,  // Левый верхний
+                 0.9f,  0.9f,  // Правый верхний
+                 0.0f,  0.0f   // Центр
         };
 
         void logError(const char *message) {
@@ -134,7 +139,7 @@ namespace Engine {
         glEnableVertexAttribArray(positionAttribute);
         glVertexAttribPointer(positionAttribute, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 
-        glDrawArrays(GL_TRIANGLE_FAN, 0, VERTEX_COUNT);
+        glDrawArrays(GL_TRIANGLES, 0, VERTEX_COUNT);
 
         glDisableVertexAttribArray(positionAttribute);
     }
@@ -202,8 +207,8 @@ namespace Engine {
         glGenBuffers(1, &vertexBuffer);
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
         glBufferData(GL_ARRAY_BUFFER,
-                     RECTANGLE_VERTICES.size() * sizeof(float),
-                     RECTANGLE_VERTICES.data(),
+                     TRIANGLE_VERTICES.size() * sizeof(float),
+                     TRIANGLE_VERTICES.data(),
                      GL_STATIC_DRAW);
     }
 

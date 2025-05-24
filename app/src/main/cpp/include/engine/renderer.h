@@ -37,7 +37,7 @@ namespace Engine {
         GLuint positionAttribute = 0;
         bool isValid = false;
         
-        static constexpr int VERTEX_COUNT = 4;
+        static constexpr int VERTEX_COUNT = 6;
     };
     
     // C-style API for JNI compatibility
