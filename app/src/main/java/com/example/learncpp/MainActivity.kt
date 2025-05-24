@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
     }
 
     /**
-     * A native method that is implemented by the 'learncpp' native library,
+     * A native method that is implemented by the 'DoodleJumpCpp' native library,
      * which is packaged with this application.
      */
     external fun stringFromJNI(): String
@@ -48,9 +48,9 @@ class MainActivity : ComponentActivity() {
 
 
     companion object {
-        // Used to load the 'learncpp' library on application startup.
+        // Used to load the 'DoodleJumpCpp' library on application startup.
         init {
-            System.loadLibrary("learncpp")
+            System.loadLibrary("DoodleJumpCpp")
         }
     }
 }
