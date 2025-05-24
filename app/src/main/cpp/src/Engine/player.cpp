@@ -9,11 +9,11 @@ namespace DoodleJumpGame {
 
     void Player::update(float deltaTime) {
         velocityY -= GRAVITY * deltaTime;
-        y += velocityY * deltaTime;
+        setY(velocityY * deltaTime);
 
         // IF the player is below the ground, reset position and apply jump force
-        if (y < 0.0f) {
-            y = 0.0f;
+        if (getY() < 0.0f) {
+            setY(0.0f);
             jump();
         }
     }
