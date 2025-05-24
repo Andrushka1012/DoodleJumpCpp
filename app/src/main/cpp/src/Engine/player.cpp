@@ -1,9 +1,9 @@
 #include "engine/player.h"
 
-namespace Engine {
+namespace DoodleJumpGame {
 
 
-    void Player::renderOn(Engine::Renderer *render) {
+    void Player::renderOn(DoodleJumpGame::Renderer *render) {
 
     }
 

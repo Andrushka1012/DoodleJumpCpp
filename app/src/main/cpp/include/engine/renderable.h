@@ -6,7 +6,7 @@ class Renderable {
 public:
     virtual ~Renderable() = default;
 
-    virtual void renderOn(Engine::Renderer* renderer) = 0;
+    virtual void renderOn(DoodleJumpGame::Renderer* renderer) = 0;
     virtual void update(float deltaTime) = 0;
 
     float x = 0.0f;

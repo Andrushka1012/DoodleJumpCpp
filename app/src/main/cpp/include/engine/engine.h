@@ -3,7 +3,7 @@
 #include "renderer.h"
 #include "memory"
 
-namespace Engine {
+namespace DoodleJumpGame {
     class Engine {
     public:
         explicit Engine(std::unique_ptr<Renderer> renderer);

@@ -5,7 +5,7 @@
 #include <memory>
 #include <cmath>
 
-namespace Engine {
+namespace DoodleJumpGame {
 
     namespace {
         constexpr const char *VERTEX_SHADER_SOURCE = R"(
@@ -36,11 +36,11 @@ namespace Engine {
         };
 
         void logError(const char *message) {
-            __android_log_print(ANDROID_LOG_ERROR, "Engine::Renderer", "%s", message);
+            __android_log_print(ANDROID_LOG_ERROR, "DoodleJumpGame::Renderer", "%s", message);
         }
 
         void logInfo(const char *message) {
-            __android_log_print(ANDROID_LOG_INFO, "Engine::Renderer", "%s", message);
+            __android_log_print(ANDROID_LOG_INFO, "DoodleJumpGame::Renderer", "%s", message);
         }
 
 
@@ -243,7 +243,7 @@ namespace Engine {
             GLchar infoLog[512];
             glGetShaderInfoLog(shader, sizeof(infoLog), nullptr, infoLog);
             logError("Shader compilation failed");
-            __android_log_print(ANDROID_LOG_ERROR, "Engine::Renderer", "Shader error: %s", infoLog);
+            __android_log_print(ANDROID_LOG_ERROR, "DoodleJumpGame::Renderer", "Shader error: %s", infoLog);
             return false;
         }
 
@@ -258,7 +258,7 @@ namespace Engine {
             GLchar infoLog[512];
             glGetProgramInfoLog(program, sizeof(infoLog), nullptr, infoLog);
             logError("Program linking failed");
-            __android_log_print(ANDROID_LOG_ERROR, "Engine::Renderer", "Program error: %s", infoLog);
+            __android_log_print(ANDROID_LOG_ERROR, "DoodleJumpGame::Renderer", "Program error: %s", infoLog);
             return false;
         }
 
@@ -313,4 +313,4 @@ namespace Engine {
         glDisableVertexAttribArray(positionAttribute);
     }
 
-} // namespace Engine 
+} // namespace DoodleJumpGame

@@ -3,7 +3,7 @@
 #include "engine/player.h"
 #include <memory>
 
-namespace Engine {
+namespace DoodleJumpGame {
     // Global renderer instance for JNI compatibility
     std::unique_ptr<Renderer> g_renderer;
 

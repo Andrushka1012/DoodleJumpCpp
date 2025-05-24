@@ -3,7 +3,7 @@
 #include "renderer.h"
 #include "renderable.h"
 
-namespace Engine {
+namespace DoodleJumpGame {
     class Player final : public Renderable {  // final = "sealed class"
     public:
         Player(float startX, float startY)

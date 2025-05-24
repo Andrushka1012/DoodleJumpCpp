@@ -3,7 +3,7 @@
 // Forward declarations
 using GLuint = unsigned int;
 
-namespace Engine {
+namespace DoodleJumpGame {
     
     class Renderer {
     public:
@@ -45,4 +45,4 @@ namespace Engine {
         static constexpr int VERTEX_COUNT = 6;
     };
     
-} // namespace Engine 
+} // namespace DoodleJumpGame

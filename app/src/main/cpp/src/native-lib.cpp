@@ -13,14 +13,14 @@ extern "C" JNIEXPORT void JNICALL
 Java_com_example_learncpp_MainActivity_initRenderer(
         JNIEnv* env,
         jobject /* this */) {
-    Engine::startEngine();
+    DoodleJumpGame::startEngine();
 }
 
 extern "C" JNIEXPORT void JNICALL
 Java_com_example_learncpp_MainActivity_renderFrame(
         JNIEnv* env,
         jobject /* this */) {
-    Engine::renderFrame();
+    DoodleJumpGame::renderFrame();
 }
 
 extern "C" JNIEXPORT void JNICALL
@@ -29,5 +29,5 @@ Java_com_example_learncpp_MainActivity_setViewport(
         jobject /* this */,
         jint width,
         jint height) {
-    Engine::setViewport(width, height);
+    DoodleJumpGame::setViewport(width, height);
 }
