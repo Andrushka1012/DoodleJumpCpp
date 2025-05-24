@@ -23,14 +23,14 @@ namespace Engine {
         void render();
         void setViewport(int width, int height);
         
-        bool isInitialized() const { return isValid; }
+        [[nodiscard]] bool isInitialized() const { return isValid; }
         
     private:
         GLuint createShader(unsigned int shaderType, const char* source) const;
         GLuint createShaderProgram();
         void createVertexBuffer();
-        bool checkShaderCompilation(GLuint shader) const;
-        bool checkProgramLinking(GLuint program) const;
+        [[nodiscard]] bool checkShaderCompilation(GLuint shader) const;
+        [[nodiscard]] bool checkProgramLinking(GLuint program) const;
         
         GLuint shaderProgram = 0;
         GLuint vertexBuffer = 0;
