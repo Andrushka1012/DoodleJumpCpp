@@ -30,8 +30,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    external fun initRenderer()
-    external fun renderFrame()
+    external fun startEngine()
+    external fun drawFrame()
     external fun setViewport(width: Int, height: Int)
 
     @Composable
@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
                 setEGLContextClientVersion(2)
                 setRenderer(object : GLSurfaceView.Renderer {
                     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
-                        initRenderer()
+                        startEngine()
                     }
 
                     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
                     }
 
                     override fun onDrawFrame(gl: GL10?) {
-                        renderFrame()
+                        drawFrame()
                     }
                 })
             }

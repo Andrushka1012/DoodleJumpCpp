@@ -5,33 +5,53 @@
 
 namespace DoodleJumpGame {
     // Global renderer instance for JNI compatibility
-    std::unique_ptr<Renderer> g_renderer;
+    std::unique_ptr<Engine> g_engine;
 
     Engine::Engine(std::unique_ptr<Renderer> renderer)
             : renderer(std::move(renderer)) {
-        // You can add initialization logic here if needed
     }
 
     Engine::~Engine() = default; // Or define custom cleanup logic if necessary
 
+    void Engine::start() {
+        if (renderer) {
+            renderer->initialize();
+        }
+    }
+
+    void Engine::setViewport(int width, int height) {
+        if (renderer) {
+            renderer->setViewport(width, height);
+        }
+    }
+
+    void Engine::drawFrame() {
+        // TODO: Game logic here
+        if (renderer) {
+            renderer->render();
+        }
+
+    }
+
 
     // C-style API implementation
     void startEngine() {
-        if (!g_renderer) {
-            g_renderer = std::make_unique<Renderer>();
+        if (!g_engine) {
+            auto renderer = std::make_unique<Renderer>();
+            g_engine = std::make_unique<Engine>(std::move(renderer));
         }
-        g_renderer->initialize();
+        g_engine->start();
     }
 
-    void renderFrame() {
-        if (g_renderer) {
-            g_renderer->render();
+    void drawFrame() {
+        if (g_engine) {
+            g_engine->drawFrame();
         }
     }
 
     void setViewport(int width, int height) {
-        if (g_renderer) {
-            g_renderer->setViewport(width, height);
+        if (g_engine) {
+            g_engine->setViewport(width, height);
         }
     }
 }

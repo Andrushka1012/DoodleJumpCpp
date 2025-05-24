@@ -10,6 +10,10 @@ namespace DoodleJumpGame {
 
         ~Engine();
 
+        void start();
+        void drawFrame();
+        void setViewport(int width, int height);
+
     private:
         std::unique_ptr<Renderer> renderer;
     };
@@ -17,7 +21,7 @@ namespace DoodleJumpGame {
     // C-style API for JNI compatibility
     void startEngine();
 
-    void renderFrame();
+    void drawFrame();
 
     void setViewport(int width, int height);
 } 

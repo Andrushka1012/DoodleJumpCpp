@@ -10,17 +10,17 @@
 using std::string;
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_learncpp_MainActivity_initRenderer(
+Java_com_example_learncpp_MainActivity_startEngine(
         JNIEnv* env,
         jobject /* this */) {
     DoodleJumpGame::startEngine();
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_learncpp_MainActivity_renderFrame(
+Java_com_example_learncpp_MainActivity_drawFrame(
         JNIEnv* env,
         jobject /* this */) {
-    DoodleJumpGame::renderFrame();
+    DoodleJumpGame::drawFrame();
 }
 
 extern "C" JNIEXPORT void JNICALL
