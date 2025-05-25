@@ -18,6 +18,6 @@ namespace DoodleJumpGame {
     private:
         float velocityY = 0.0f;
         static constexpr float GRAVITY = -9.8f;
-        static constexpr float JUMP_FORCE = 15.0f;
+        static constexpr float JUMP_FORCE = 5.0f;
     };
 }

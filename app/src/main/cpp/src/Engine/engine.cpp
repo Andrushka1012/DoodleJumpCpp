@@ -54,9 +54,9 @@ namespace DoodleJumpGame {
 //        camera.update(player.getPosition(), deltaTime); // follow player
 
 
-//        if (!camera.getPosition().isAbove(player.getPosition())) {
-//            player.jump(); // Example action: player jumps if in camera view
-//        }
+        if (camera.isAbove(player.getPosition())) {
+            player.jump(); // Example action: player jumps if in camera view
+        }
 
     }
 

@@ -7,6 +7,7 @@ namespace DoodleJumpGame {
     class Camera {
     public:
         Camera() = default;
+
         Camera(float startX, float startY)
                 : position(startX, startY) {}
 
@@ -17,14 +18,12 @@ namespace DoodleJumpGame {
 
 
         [[nodiscard]] bool isAbove(float value) const {
-            return position.y > value;
+            return position.isAbove(value);
         }
 
-
-        [[nodiscard]] Position getPosition() const {
-            return position;
+        [[nodiscard]] bool isAbove(Position value) const {
+            return position.isAbove(value);
         }
-
 
     private:
         Position position;

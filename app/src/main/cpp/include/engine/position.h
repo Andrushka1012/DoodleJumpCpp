@@ -21,5 +21,13 @@ namespace DoodleJumpGame {
         
         float x = 0.0f;
         float y = 0.0f;
+
+        [[nodiscard]] bool isAbove(float value) const {
+            return y > value;
+        }
+
+        [[nodiscard]] bool isAbove(Position value) const {
+            return isAbove(value.y);
+        }
     };
 }
