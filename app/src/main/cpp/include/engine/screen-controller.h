@@ -12,11 +12,11 @@ namespace DoodleJumpGame {
 
         void setAspectRatio(float ratio) { aspectRatio = ratio; }
 
-        [[nodiscard]] bool isAbove(float value) const {
+        [[nodiscard]] bool isCameraAbove(float value) const {
             return cameraPosition.isAbove(value);
         }
 
-        [[nodiscard]] bool isAbove(Position value) const {
+        [[nodiscard]] bool isCameraAbove(Position value) const {
             return cameraPosition.isAbove(value);
         }
 

@@ -3,7 +3,7 @@
 #include "renderer.h"
 #include "memory"
 #include "player.h"
-#include "camera.h"
+#include "screen-controller.h"
 #include "platform.h"
 #include "game-object.h"
 #include <vector>
@@ -27,7 +27,7 @@ namespace DoodleJumpGame {
 
         std::unique_ptr<Renderer> renderer;
         Player player;
-        Camera camera;
+        Camera screenController;
         std::vector<Platform> platforms;
 
         void initializeGame();

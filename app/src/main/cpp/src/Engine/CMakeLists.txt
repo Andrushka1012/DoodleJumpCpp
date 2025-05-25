@@ -2,7 +2,7 @@ add_library(Engine STATIC
         engine.cpp
         renderer.cpp
         player.cpp
-        camera.cpp
+        screen-controller.cpp
         platform.cpp
         game-object.cpp
 )

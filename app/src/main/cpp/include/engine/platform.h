@@ -2,7 +2,7 @@
 
 #include "renderer.h"
 #include "game-object.h"
-#include "camera.h"
+#include "screen-controller.h"
 #include "constants.h"
 
 namespace DoodleJumpGame {

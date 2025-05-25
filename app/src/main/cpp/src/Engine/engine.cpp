@@ -23,15 +23,22 @@ namespace DoodleJumpGame {
 
     void Engine::initializeGame() {
         player = Player(0.0f, 0.0f);
-        camera = Camera(0.0f, GameConstants::WORLD_HEIGHT);
+        screenController = Camera(0.0f, GameConstants::WORLD_HEIGHT);
 
         platforms.emplace_back(0.5f, 0.1);
+        platforms.emplace_back(-0.5f, 0.4);
+        platforms.emplace_back(0.5f, 0.6);
+        platforms.emplace_back(-0.5f, 0.8);
+        platforms.emplace_back(0.5f, 1.0);
+        platforms.emplace_back(-0.5f, 1.2);
+        platforms.emplace_back(0.5f, 1.4);
+        platforms.emplace_back(-0.5f, 1.6);
     }
 
     void Engine::setViewport(int width, int height) {
         if (renderer) {
             renderer->setViewport(width, height);
-            camera.setAspectRatio(static_cast<float>(width) / height);
+            screenController.setAspectRatio(static_cast<float>(width) / height);
         }
     }
 
@@ -40,7 +47,7 @@ namespace DoodleJumpGame {
     }
 
     void Engine::drawFrame() {
-        if (camera.isAbove(Y_NORMALIZE_THRESHOLD)) {
+        if (screenController.isCameraAbove(Y_NORMALIZE_THRESHOLD)) {
             normalizeYPosition();
         }
 
@@ -67,7 +74,8 @@ namespace DoodleJumpGame {
             }
         }
 
-        if (camera.isAbove(player.getPosition())) {
+
+        if (screenController.isCameraAbove(player.getPosition())) {
             player.jump();
         }
 
@@ -107,7 +115,7 @@ namespace DoodleJumpGame {
     void Engine::draw(const GameObject &renderable) {
         if (renderer) {
             auto renderObject = renderable.getRenderObject();
-            auto adjustedObject = camera.adjustToScreen(renderObject);
+            auto adjustedObject = screenController.adjustToScreen(renderObject);
 
             renderer->draw(adjustedObject);
         }

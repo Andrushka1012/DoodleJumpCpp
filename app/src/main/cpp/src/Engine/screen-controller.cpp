@@ -1,6 +1,6 @@
 #include "engine/position.h"
-#include "engine/camera.h"
+#include "engine/screen-controller.h"
 
 namespace DoodleJumpGame {
-    
+
 }
