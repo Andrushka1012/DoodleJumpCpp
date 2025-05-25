@@ -21,11 +21,11 @@ namespace DoodleJumpGame {
     }
 
     void Player::update(float deltaTime) {
-        velocityY += GRAVITY * deltaTime;
+        velocityY += GameConstants::PLAYER_GRAVITY * deltaTime;
         setY(getY() + velocityY * deltaTime);
     }
 
     void Player::jump() {
-        velocityY = JUMP_FORCE;
+        velocityY = GameConstants::PLAYER_JUMP_FORCE;
     }
 }

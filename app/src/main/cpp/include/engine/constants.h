@@ -6,8 +6,8 @@ namespace DoodleJumpGame::GameConstants {
 
     // Player constants
     constexpr float PLAYER_SIZE = 20.0f;
-    constexpr float PLAYER_GRAVITY = -70.0f;
-    constexpr float PLAYER_JUMP_FORCE = 70.0f;
+    constexpr float PLAYER_GRAVITY = -220.0f;
+    constexpr float PLAYER_JUMP_FORCE = 150.0f;
 
 
     // Camera constants
