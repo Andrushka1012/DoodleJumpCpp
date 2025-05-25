@@ -29,6 +29,7 @@ namespace DoodleJumpGame {
     void Engine::setViewport(int width, int height) {
         if (renderer) {
             renderer->setViewport(width, height);
+            camera.setAspectRatio(static_cast<float>(width) / height);
         }
     }
 
@@ -77,9 +78,7 @@ namespace DoodleJumpGame {
     void Engine::renderObjects() {
         if (renderer) {
             renderer->clear(0.0f, 0.0f, 0.0f, 1.0f);
-
-
-            player.renderOn(renderer.get(), camera.getY());
+            player.renderOn(renderer.get(), camera);
         }
     }
 

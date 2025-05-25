@@ -10,7 +10,7 @@ namespace DoodleJumpGame {
         Camera(float startY)
                 : cameraPosition(0, startY) {}
 
-        void setAspectRatio(float ratio) { aspectRatio = ratio; }
+        void setAspectRatio(float ratio) { aspectRatio = ratio; } // TODO: check how it handles square screens
 
         [[nodiscard]] bool isAbove(float value) const {
             return cameraPosition.isAbove(value);
