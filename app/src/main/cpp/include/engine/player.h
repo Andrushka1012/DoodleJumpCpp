@@ -25,6 +25,8 @@ namespace DoodleJumpGame {
             return velocityY <= 0.0f;
         }
 
+        void normalizeY(float offset);
+
     private:
         float velocityY = 0.0f;
         float horizontalMovement = 0.0f;

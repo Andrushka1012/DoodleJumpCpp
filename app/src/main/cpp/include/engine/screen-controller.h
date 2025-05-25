@@ -40,12 +40,15 @@ namespace DoodleJumpGame {
         void reset();
 
         [[nodiscard]] float getMaxCameraHeightRecord() const {
-            return maxCameraHeight;
+            return maxCameraHeight + normalisedHeight;
         }
+
+        float normalizeCameraY();
 
     private:
         Position cameraPosition;
         float maxCameraHeight = 0.0f;
+        float normalisedHeight = 0.0f;
         float aspectRatio = 1.0f;
         float worldViewHeight = 100.0f;
 
