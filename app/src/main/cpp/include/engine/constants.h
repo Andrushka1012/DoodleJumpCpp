@@ -20,6 +20,7 @@ namespace DoodleJumpGame::GameConstants {
     constexpr float PLATFORM_FALLING_SPEED = 1.5f;
     constexpr int BASE_PLATFORM_AMOUNT = 10;
     constexpr int MINIMAL_PLATFORM_AMOUNT = 5;
+    constexpr int MIN_PLATFORM_GAP = 0.1;
 
 
     // Camera constants

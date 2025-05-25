@@ -22,7 +22,7 @@ namespace DoodleJumpGame {
 
         void adjustCameraPosition(const Position& position);
 
-        [[nodiscard]] float getY() const {
+        [[nodiscard]] float getCameraY() const {
             return cameraPosition.y;
         }
 

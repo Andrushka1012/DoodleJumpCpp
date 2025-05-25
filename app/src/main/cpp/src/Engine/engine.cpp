@@ -3,6 +3,7 @@
 #include "engine/player.h"
 #include <memory>
 #include <chrono>
+#include <random>
 
 namespace DoodleJumpGame {
     // Global renderer instance for JNI compatibility
@@ -26,16 +27,10 @@ namespace DoodleJumpGame {
         player = Player(0.0f, 0.0f);
         screenController.reset();
 
+        highestPlatformY = 0.0f;
         platforms.clear();
-        platforms.emplace_back(0.0f, 0.0, PlatformType::Normal);
-        platforms.emplace_back(0.5f, 0.1, PlatformType::Crumbling);
-        platforms.emplace_back(-0.5f, 0.4, PlatformType::Moving, 1);
-        platforms.emplace_back(0.5f, 0.6, PlatformType::Falling);
-        platforms.emplace_back(-0.5f, 0.8, PlatformType::Normal);
-        platforms.emplace_back(0.5f, 1.0, PlatformType::Crumbling);
-        platforms.emplace_back(-0.5f, 1.2, PlatformType::Normal);
-        platforms.emplace_back(0.5f, 1.4, PlatformType::Normal);
-        platforms.emplace_back(-0.5f, 1.6, PlatformType::Crumbling);
+        platforms.emplace_back(0.0f, 0.0, PlatformType::Normal); // Start with a single platform at the center
+        spawnPlatforms();
     }
 
     void Engine::setViewport(int width, int height) {
@@ -65,10 +60,12 @@ namespace DoodleJumpGame {
         for (Platform &platform: platforms) {
             platform.normalizeY(normalizedOffset);
         }
+        highestPlatformY -= normalizedOffset;
     }
 
     void Engine::updateGamePosition() {
         removeInvisibleObjects();
+        spawnPlatforms();
 
         float deltaTime = calculateDeltaTime();
         player.update(deltaTime);
@@ -88,12 +85,12 @@ namespace DoodleJumpGame {
     }
 
     void Engine::removeInvisibleObjects() {
-        if (player.getPosition().isBelow(screenController.getY() - GameConstants::PLAYER_END_OF_GAME_FALLING_OFFSET)) {
+        if (player.getPosition().isBelow(screenController.getCameraY() - GameConstants::PLAYER_END_OF_GAME_FALLING_OFFSET)) {
             onGameOverCallback(screenController.getMaxCameraHeightRecord() * 10.0f);
             return;
         }
 
-        float cameraBottom = screenController.getY() + GameConstants::CAMERA_REMOVE_OBJECT_OFFSET_Y;
+        float cameraBottom = screenController.getCameraY() + GameConstants::CAMERA_REMOVE_OBJECT_OFFSET_Y;
         platforms.erase(
                 std::remove_if(platforms.begin(), platforms.end(),
                                [cameraBottom](const Platform &platform) {
@@ -101,6 +98,66 @@ namespace DoodleJumpGame {
                                }),
                 platforms.end()
         );
+    }
+
+    void Engine::spawnPlatforms() {
+        int required = desiredPlatformCount();
+        if (platforms.size() >= required) return;
+
+        while (platforms.size() < required) {
+            float newX = randomFloat(0.0f, 1.8f) - 0.9f;
+
+            float gap = randomFloat(0.2f, 0.4f);
+            float newY = highestPlatformY + gap;
+
+            float screenTopY = screenController.getCameraY() + 2.0f;
+            if (screenTopY > 3.0f && newY < screenTopY - 0.05f) {
+                newY = screenTopY + 0.05f;
+            }
+
+            if (newY - highestPlatformY < GameConstants::MIN_PLATFORM_GAP) {
+                continue; // Ensure a minimum gap between platforms
+            }
+
+
+            auto type = getRandomPlatformType();
+            float offset = 0;
+            if (type == PlatformType::Moving) {
+                bool isLeft = randomBool();
+                if (isLeft) {
+                    offset = -1;
+                } else {
+                    offset = 1;
+                }
+            }
+
+            Platform candidate(newX, newY, type, offset);
+
+            if (!isOverlapping(candidate)) {
+                platforms.push_back(candidate);
+                highestPlatformY = std::max(highestPlatformY, newY);
+            }
+        }
+    }
+
+    int Engine::desiredPlatformCount() const {
+        float heightFactor = screenController.getMaxCameraHeightRecord() * 10; // Remove each 1 after one screen height units
+
+        GameConstants::BASE_PLATFORM_AMOUNT - static_cast<int>(heightFactor * 5);
+        return std::max(static_cast<int>(GameConstants::BASE_PLATFORM_AMOUNT - heightFactor * 5), GameConstants::MINIMAL_PLATFORM_AMOUNT);
+    }
+
+    PlatformType Engine::getRandomPlatformType() {
+        static std::mt19937 rng(std::random_device{}());
+        static std::uniform_int_distribution<int> dist(0, 3);
+
+        return static_cast<PlatformType>(dist(rng));
+    }
+
+    bool Engine::isOverlapping(const Platform &newPlatform) const {
+        return std::any_of(platforms.begin(), platforms.end(), [&](const Platform &platform) {
+            return platform.isColliding(newPlatform);
+        });
     }
 
     void Engine::drawObjects() {
@@ -134,6 +191,19 @@ namespace DoodleJumpGame {
         float deltaTime = std::chrono::duration<float>(duration).count();
 
         return std::min(deltaTime, 0.033f); // Cap delta time to 30 FPS (1/30 seconds)
+    }
+
+    float Engine::randomFloat(float min, float max) {
+        static std::mt19937 rng(std::random_device{}());
+        std::uniform_real_distribution<float> dist(min, max);
+        return dist(rng);
+    }
+
+    bool Engine::randomBool() {
+        static std::mt19937 rng(std::random_device{}());
+        static std::bernoulli_distribution dist(0.5); // 0.5 = 50% chance true
+
+        return dist(rng);
     }
 
     void Engine::draw(const GameObject &renderable) {
