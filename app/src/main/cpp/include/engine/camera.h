@@ -24,12 +24,7 @@ namespace DoodleJumpGame {
             return cameraPosition.y;
         }
 
-        Position transformToOnScreenPosition(Position position) {
-            return {
-                    position.x,
-                    position.y - cameraPosition.y - 0.7f
-            };
-        }
+        Position transformToOnScreenPosition(Position position);
 
         float transformToOnScreenWidth(float size) {
             return size / (200.0f * aspectRatio);
