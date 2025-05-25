@@ -1,0 +1,21 @@
+#pragma once
+
+#include "renderer.h"
+#include "renderable.h"
+#include "camera.h"
+#include "constants.h"
+
+namespace DoodleJumpGame {
+    class Platform final : public Renderable {  // final = "sealed class"
+    public:
+        explicit Platform(float startX = 0, float startY = 0)
+                : Renderable(startX, startY, GameConstants::PLATFORM_WIDTH, GameConstants::PLATFORM_HEIGHT) {}
+
+        void renderOn(Renderer *render, Camera camera) const override;
+
+        void update(float deltaTime) override;
+
+    private:
+
+    };
+}

@@ -9,9 +9,9 @@ namespace DoodleJumpGame {
     class Player final : public Renderable {  // final = "sealed class"
     public:
         Player(float startX = 0, float startY = 0)
-                : Renderable(startX, startY, GameConstants::PLAYER_SIZE, GameConstants::PLAYER_SIZE) {}
+                : Renderable(startX, startY, GameConstants::PLAYER_WIDTH, GameConstants::PLAYER_HEIGHT) {}
 
-        void renderOn(Renderer *render, Camera camera) override;
+        void renderOn(Renderer *render, Camera camera) const override;
 
         void update(float deltaTime) override;
 

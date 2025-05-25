@@ -3,6 +3,7 @@ add_library(Engine STATIC
         renderer.cpp
         player.cpp
         camera.cpp
+        platform.cpp
 )
 
 target_include_directories(Engine PUBLIC ../../include)

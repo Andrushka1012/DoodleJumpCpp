@@ -4,6 +4,8 @@
 #include "memory"
 #include "player.h"
 #include "camera.h"
+#include "platform.h"
+#include <vector>
 
 namespace DoodleJumpGame {
     class Engine {
@@ -25,6 +27,7 @@ namespace DoodleJumpGame {
         std::unique_ptr<Renderer> renderer;
         Player player;
         Camera camera;
+        std::vector<Platform> platforms;
 
         void initializeGame();
         void normalizeYPosition();
