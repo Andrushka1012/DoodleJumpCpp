@@ -2,13 +2,14 @@
 
 #include "renderer.h"
 #include "position.h"
+#include "camera.h"
 
 namespace DoodleJumpGame {
     class Renderable {
     public:
         virtual ~Renderable() = default;
 
-        virtual void renderOn(DoodleJumpGame::Renderer *renderer, float cameraOffsetY) = 0;
+        virtual void renderOn(DoodleJumpGame::Renderer *renderer, Camera camera) = 0;
 
         virtual void update(float deltaTime) = 0;
 

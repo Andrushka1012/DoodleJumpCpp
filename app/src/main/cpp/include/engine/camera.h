@@ -9,24 +9,35 @@ namespace DoodleJumpGame {
         Camera() = default;
 
         Camera(float startY)
-                : position(0, startY) {}
+                : cameraPosition(0, startY) {}
 
 
         [[nodiscard]] bool isAbove(float value) const {
-            return position.isAbove(value);
+            return cameraPosition.isAbove(value);
         }
 
         [[nodiscard]] bool isAbove(Position value) const {
-            return position.isAbove(value);
+            return cameraPosition.isAbove(value);
         }
 
         [[nodiscard]] float getY() const {
-            return position.y;
+            return cameraPosition.y;
+        }
+
+        Position transformToOnScreenPosition(Position position) {
+            return {
+                    position.x,
+                    position.y - cameraPosition.y - 0.7f
+            };
         }
 
 
+        float transformToOnScreenSize(float size) {
+            return size / 200;
+        }
+
     private:
-        Position position;
+        Position cameraPosition;
     };
 
 
