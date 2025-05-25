@@ -25,7 +25,7 @@ namespace DoodleJumpGame {
         player = Player(0.0f, 0.0f);
         camera = Camera(0.0f, GameConstants::WORLD_HEIGHT);
 
-        platforms.emplace_back(0.5f, 10.0f);
+        platforms.emplace_back(0.5f, 0.1);
     }
 
     void Engine::setViewport(int width, int height) {
@@ -50,24 +50,6 @@ namespace DoodleJumpGame {
 
     void Engine::normalizeYPosition() {
         // TODO: Implement Y position normalization logic
-    }
-
-    float Engine::calculateDeltaTime() {
-        auto currentTime = std::chrono::steady_clock::now();
-
-        static bool firstFrame = true;
-        if (firstFrame) {
-            lastFrameTime = currentTime;
-            firstFrame = false;
-            return 0.016f; // Initial delta time for the first frame (assuming 60 FPS)
-        }
-
-        auto duration = currentTime - lastFrameTime;
-        lastFrameTime = currentTime;
-
-        float deltaTime = std::chrono::duration<float>(duration).count();
-
-        return std::min(deltaTime, 0.033f); // Cap delta time to 30 FPS (1/30 seconds)
     }
 
     void Engine::updateGamePosition() {
@@ -98,6 +80,24 @@ namespace DoodleJumpGame {
         }
     }
 
+
+    float Engine::calculateDeltaTime() {
+        auto currentTime = std::chrono::steady_clock::now();
+
+        static bool firstFrame = true;
+        if (firstFrame) {
+            lastFrameTime = currentTime;
+            firstFrame = false;
+            return 0.016f; // Initial delta time for the first frame (assuming 60 FPS)
+        }
+
+        auto duration = currentTime - lastFrameTime;
+        lastFrameTime = currentTime;
+
+        float deltaTime = std::chrono::duration<float>(duration).count();
+
+        return std::min(deltaTime, 0.033f); // Cap delta time to 30 FPS (1/30 seconds)
+    }
 
     // C-style API implementation
     void startEngine() {
