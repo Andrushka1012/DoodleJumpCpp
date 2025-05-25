@@ -86,7 +86,7 @@ namespace DoodleJumpGame {
         // TODO: Implement logic to remove platforms that are no longer visible
 
         if (player.getPosition().isBelow(screenController.getY() - GameConstants::PLAYER_END_OF_GAME_FALLING_OFFSET)) {
-            onGameOverCallback(screenController.getMaxCameraHeightRecord() * 100.0f);
+            onGameOverCallback(screenController.getMaxCameraHeightRecord() * 10.0f);
             return;
         }
     }
