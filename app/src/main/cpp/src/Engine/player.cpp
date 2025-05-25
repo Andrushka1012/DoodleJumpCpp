@@ -13,8 +13,8 @@ namespace DoodleJumpGame {
         renderer->setTransform(
                 onScreenPosition.x,
                 onScreenPosition.y,
-                camera.transformToOnScreenSize(width),
-                camera.transformToOnScreenSize(height),
+                camera.transformToOnScreenWidth(width),
+                camera.transformToOnScreenHeight(height),
                 0.0f
         );
         renderer->drawQuad();
