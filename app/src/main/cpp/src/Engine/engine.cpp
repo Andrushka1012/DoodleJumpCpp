@@ -23,7 +23,7 @@ namespace DoodleJumpGame {
 
     void Engine::initializeGame() {
         player = Player(0.0f, 0.0f);
-        camera = Camera(0.0f);
+        camera = Camera(0.0f, GameConstants::WORLD_HEIGHT);
     }
 
     void Engine::setViewport(int width, int height) {

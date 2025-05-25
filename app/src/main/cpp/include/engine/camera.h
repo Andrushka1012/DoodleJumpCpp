@@ -1,12 +1,13 @@
 #pragma once
 
 #include "position.h"
+#include "constants.h"
 
 namespace DoodleJumpGame {
     class Camera {
     public:
         explicit Camera(float startY = 0.0f, float worldHeight = 100.0f)
-            : cameraPosition(0, startY), worldViewHeight(worldHeight) {}
+                : cameraPosition(0, startY), worldViewHeight(worldHeight) {}
 
         void setAspectRatio(float ratio) { aspectRatio = ratio; }
 
@@ -25,7 +26,7 @@ namespace DoodleJumpGame {
         [[nodiscard]] Position transformToOnScreenPosition(Position worldPos) const {
             float relativeY = worldPos.y - cameraPosition.y;
 
-            float screenY = (relativeY / (worldViewHeight * 0.5f));
+            float screenY = (relativeY / (worldViewHeight * 0.5f)) + GameConstants::CAMERA_OFFSET_Y;
             float screenX = worldPos.x / (worldViewHeight * 0.5f * aspectRatio);
 
             return {screenX, screenY};

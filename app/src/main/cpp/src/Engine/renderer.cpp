@@ -105,6 +105,7 @@ namespace DoodleJumpGame {
     }
 
     void Renderer::setTransform(float x, float y, float sx, float sy, float rotDeg) {
+        logInfo("setTransform: x=%.2f, y=%.2f, sx=%.2f, sy=%.2f, rotDeg=%.2f", x, y, sx, sy, rotDeg);
         if (!isValid) return;
         float rad = rotDeg * static_cast<float>(M_PI) / 180.0f;
         float c = cosf(rad);
