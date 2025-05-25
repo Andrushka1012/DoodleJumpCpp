@@ -1,48 +1,71 @@
 #pragma once
 
-// Forward declarations
+#include <array>
+#include <GLES2/gl2.h>
+
+// Forward declaration for GLuint (Android NDK provides typedef)
 using GLuint = unsigned int;
 
 namespace DoodleJumpGame {
-    
+
+    /**
+     * Lightweight 2-D renderer built on top of OpenGL ES 2.0.
+     * Рендерит простые примитивы (пока только квадрат) с возможностью
+     * трансформации (позиция, масштаб, вращение) и установки цвета.
+     * Все объекты игры используют общий статический vertex buffer —
+     * меняется только матрица u_transform и цвет u_color.
+     */
     class Renderer {
     public:
         Renderer() = default;
         ~Renderer();
-        
-        // Delete copy constructor and assignment operator
+
+        // Disable copy
         Renderer(const Renderer&) = delete;
         Renderer& operator=(const Renderer&) = delete;
-        
-        // Move constructor and assignment operator
+
+        // Enable move semantics
         Renderer(Renderer&& other) noexcept;
         Renderer& operator=(Renderer&& other) noexcept;
-        
-        bool initialize();
+
+        // Lifecycle
+        bool initialize();  // Компиляция шейдеров, создание буферов
         void cleanup();
-        void render();
         void setViewport(int width, int height);
-        
-        [[nodiscard]] bool isInitialized() const { return isValid; }
-        
-        void setTransform(float x, float y, float scaleX = 1.0f, float scaleY = 1.0f, float rotation = 0.0f);
+
+        // Frame helpers
+        void clear(float r, float g, float b, float a = 1.0f);
+
+        // Draw helpers
+        void setColor(float r, float g, float b, float a = 1.0f);
+        void setTransform(float x, float y, float scaleX = 1.0f, float scaleY = 1.0f, float rotationDeg = 0.0f);
         void resetTransform();
-        void renderTriangles() const;
-        
+
+        // Primitive draw calls
+        void drawQuad() const;   // 4-вершинный квадрат (TRIANGLE_FAN)
+
+        [[nodiscard]] bool isInitialized() const { return isValid; }
+
     private:
-        GLuint createShader(unsigned int shaderType, const char* source) const;
+        // Internal helpers
+        GLuint compileShader(GLenum type, const char* source) const;
         GLuint createShaderProgram();
-        void createVertexBuffer();
-        [[nodiscard]] bool checkShaderCompilation(GLuint shader) const;
-        [[nodiscard]] bool checkProgramLinking(GLuint program) const;
-        
+        void createQuadBuffer();
+        bool checkShaderCompilation(GLuint shader) const;
+        bool checkProgramLinking(GLuint program) const;
+
+        // GL handles
         GLuint shaderProgram = 0;
-        GLuint vertexBuffer = 0;
-        GLuint positionAttribute = 0;
+        GLuint quadVbo = 0;
+        GLuint positionAttr = 0;
         GLuint transformUniform = 0;
+        GLuint colorUniform = 0;
+
+        // State flag
         bool isValid = false;
-        
-        static constexpr int VERTEX_COUNT = 6;
+
+        // Constants
+        static constexpr int QUAD_VERTEX_COUNT = 4;
     };
-    
+
 } // namespace DoodleJumpGame

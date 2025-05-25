@@ -37,19 +37,37 @@ namespace DoodleJumpGame {
             normalizeYPosition();
         }
 
-        float deltaTime = calculateDeltaTime();
+        updateGamePosition();
 
-        player.update(deltaTime);
+        renderObjects();
 
-
-
-        if (renderer) {
-            renderer->render();
-        }
     }
 
     void Engine::normalizeYPosition() {
         // TODO: Implement Y position normalization logic
+    }
+
+    void Engine::updateGamePosition() {
+        float deltaTime = calculateDeltaTime();
+        player.update(deltaTime);
+
+//        camera.update(player.getPosition(), deltaTime); // follow player
+
+
+//        if (!camera.getPosition().isAbove(player.getPosition())) {
+//            player.jump(); // Example action: player jumps if in camera view
+//        }
+
+    }
+
+
+    void Engine::renderObjects() {
+        if (renderer) {
+            // Clear screen with black background
+            renderer->clear(0.0f, 0.0f, 0.0f, 1.0f);
+
+            player.renderOn(renderer.get());
+        }
     }
 
     float Engine::calculateDeltaTime() {

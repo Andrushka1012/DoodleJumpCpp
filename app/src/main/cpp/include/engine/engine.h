@@ -27,7 +27,8 @@ namespace DoodleJumpGame {
 
         void initializeGame();
         void normalizeYPosition();
-
+        void updateGamePosition();
+        void renderObjects();
         float calculateDeltaTime();
     };
 

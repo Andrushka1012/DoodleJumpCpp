@@ -21,6 +21,11 @@ namespace DoodleJumpGame {
         }
 
 
+        [[nodiscard]] Position getPosition() const {
+            return position;
+        }
+
+
     private:
         Position position;
     };
