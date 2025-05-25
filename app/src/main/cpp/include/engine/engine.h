@@ -34,6 +34,7 @@ namespace DoodleJumpGame {
         Player player;
         Camera screenController;
         std::vector<Platform> platforms;
+        float highestPlatformY = 0.0f;
 
         void normalizeYPosition();
         void updateGamePosition();
@@ -41,6 +42,17 @@ namespace DoodleJumpGame {
         void drawObjects();
         void draw(const GameObject &renderable);
         float calculateDeltaTime();
+
+        [[nodiscard]] int desiredPlatformCount() const;
+        void spawnPlatforms();
+
+        static static float randomFloat(float min, float max);
+
+        static PlatformType getRandomPlatformType();
+
+        static bool randomBool();
+
+        bool isOverlapping(const Platform &newPlatform) const;
     };
 
     // C-style API for JNI compatibility
