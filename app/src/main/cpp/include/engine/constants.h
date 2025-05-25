@@ -2,19 +2,19 @@
 
 namespace DoodleJumpGame::GameConstants {
     // World dimensions
-    constexpr float WORLD_HEIGHT = 200.0f;
+    constexpr float WORLD_HEIGHT = 2.0f;
 
     // Player constants
-    constexpr float PLAYER_WIDTH = 15.0f;
-    constexpr float PLAYER_HEIGHT = 20.0f;
-    constexpr float PLAYER_GRAVITY = -220.0f;
-    constexpr float PLAYER_JUMP_FORCE = 150.0f;
+    constexpr float PLAYER_WIDTH = 0.15f;
+    constexpr float PLAYER_HEIGHT = 0.2f;
+    constexpr float PLAYER_GRAVITY = -2.2f;
+    constexpr float PLAYER_JUMP_FORCE = 1.5f;
     constexpr float PLAYER_HORIZONTAL_MOVE_SPEED = 4;
 
 
     // Platform constants
-    constexpr float PLATFORM_WIDTH = 25;
-    constexpr float PLATFORM_HEIGHT = 5.0f;
+    constexpr float PLATFORM_WIDTH = 0.25;
+    constexpr float PLATFORM_HEIGHT = 0.05f;
 
 
     // Camera constants
