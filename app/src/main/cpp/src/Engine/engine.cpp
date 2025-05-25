@@ -23,7 +23,7 @@ namespace DoodleJumpGame {
 
     void Engine::initializeGame() {
         player = Player(0.0f, 0.0f);
-        camera = Camera(0.0f, 0.0f);
+        camera = Camera(0.0f);
     }
 
     void Engine::setViewport(int width, int height) {
@@ -38,36 +38,11 @@ namespace DoodleJumpGame {
         }
 
         updateGamePosition();
-
         renderObjects();
-
     }
 
     void Engine::normalizeYPosition() {
         // TODO: Implement Y position normalization logic
-    }
-
-    void Engine::updateGamePosition() {
-        float deltaTime = calculateDeltaTime();
-        player.update(deltaTime);
-
-//        camera.update(player.getPosition(), deltaTime); // follow player
-
-
-        if (camera.isAbove(player.getPosition())) {
-            player.jump(); // Example action: player jumps if in camera view
-        }
-
-    }
-
-
-    void Engine::renderObjects() {
-        if (renderer) {
-            // Clear screen with black background
-            renderer->clear(0.0f, 0.0f, 0.0f, 1.0f);
-
-            player.renderOn(renderer.get());
-        }
     }
 
     float Engine::calculateDeltaTime() {
@@ -86,6 +61,26 @@ namespace DoodleJumpGame {
         float deltaTime = std::chrono::duration<float>(duration).count();
 
         return std::min(deltaTime, 0.033f); // Cap delta time to 30 FPS (1/30 seconds)
+    }
+
+    void Engine::updateGamePosition() {
+        float deltaTime = calculateDeltaTime();
+
+        player.update(deltaTime);
+
+        if (camera.isAbove(player.getPosition())) {
+            player.jump();
+        }
+
+    }
+
+    void Engine::renderObjects() {
+        if (renderer) {
+            renderer->clear(0.0f, 0.0f, 0.0f, 1.0f);
+
+
+            player.renderOn(renderer.get(), camera.getY());
+        }
     }
 
 

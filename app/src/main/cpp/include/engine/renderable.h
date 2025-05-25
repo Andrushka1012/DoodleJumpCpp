@@ -8,7 +8,7 @@ namespace DoodleJumpGame {
     public:
         virtual ~Renderable() = default;
 
-        virtual void renderOn(DoodleJumpGame::Renderer *renderer) = 0;
+        virtual void renderOn(DoodleJumpGame::Renderer *renderer, float cameraOffsetY) = 0;
 
         virtual void update(float deltaTime) = 0;
 

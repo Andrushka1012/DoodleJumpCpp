@@ -2,18 +2,21 @@
 
 namespace DoodleJumpGame {
 
-    void Player::renderOn(Renderer *renderer) {
+    void Player::renderOn(Renderer *renderer, float cameraOffsetY) {
         if (!renderer || !visible) {
             return;
         }
-        
-        // Set player color (green)
+
+//        Position framePosition = getPosition() - cameraPosition;
+
         renderer->setColor(0.0f, 1.0f, 0.0f, 1.0f);
-        
-        // Set transform: position and size
-        renderer->setTransform(getX(), getY(), width / 100.0f, height / 100.0f);
-        
-        // Draw the player as a quad
+        renderer->setTransform(
+                getX(),
+                getY() ,
+                width / 200,
+                height / 200,
+                0.0f
+        );
         renderer->drawQuad();
     }
 

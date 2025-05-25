@@ -26,10 +26,10 @@ namespace DoodleJumpGame {
 
         // Квадрат (-0.5..0.5) Вершины по часовой стрелке для TRIANGLE_FAN
         constexpr std::array<float, 8> QUAD_VERTICES = {
-            -0.5f, -0.5f,
-             0.5f, -0.5f,
-             0.5f,  0.5f,
-            -0.5f,  0.5f
+                -0.5f, -0.5f,
+                0.5f, -0.5f,
+                0.5f,  0.5f,
+                -0.5f,  0.5f
         };
 
         void logError(const char *msg) { __android_log_print(ANDROID_LOG_ERROR, "Renderer", "%s", msg); }
@@ -110,10 +110,10 @@ namespace DoodleJumpGame {
         float c = cosf(rad);
         float s = sinf(rad);
         float m[16] = {
-            c*sx,  s*sx, 0, 0,
-           -s*sy,  c*sy, 0, 0,
-              0 ,     0, 1, 0,
-               x,     y, 0, 1
+                c*sx,  s*sx, 0, 0,
+                -s*sy,  c*sy, 0, 0,
+                0 ,     0, 1, 0,
+                x,     y, 0, 1
         };
         glUseProgram(shaderProgram);
         glUniformMatrix4fv(transformUniform, 1, GL_FALSE, m);
