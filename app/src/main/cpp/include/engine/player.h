@@ -17,7 +17,12 @@ namespace DoodleJumpGame {
 
         void jump();
 
+        void setHorizontalMovement(float value) {
+            horizontalMovement = value;
+        }
+
     private:
         float velocityY = 0.0f;
+        float horizontalMovement = 0.0f;
     };
 }

@@ -27,7 +27,7 @@ namespace DoodleJumpGame {
             float relativeY = worldPos.y - cameraPosition.y;
 
             float screenY = (relativeY / (worldViewHeight * 0.5f)) + GameConstants::CAMERA_OFFSET_Y;
-            float screenX = worldPos.x / (worldViewHeight * 0.5f * aspectRatio);
+            float screenX = worldPos.x;
 
             return {screenX, screenY};
         }

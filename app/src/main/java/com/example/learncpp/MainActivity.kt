@@ -3,6 +3,7 @@ package com.example.learncpp
 import android.annotation.SuppressLint
 import android.opengl.GLSurfaceView
 import android.os.Bundle
+import android.view.MotionEvent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -33,7 +34,9 @@ class MainActivity : ComponentActivity() {
     external fun startEngine()
     external fun drawFrame()
     external fun setViewport(width: Int, height: Int)
+    external fun onHorizontalMove(x: Float)
 
+    @SuppressLint("ClickableViewAccessibility")
     @Composable
     fun MainScreen() {
         AndroidView(factory = { context ->
@@ -52,6 +55,32 @@ class MainActivity : ComponentActivity() {
                         drawFrame()
                     }
                 })
+
+                setOnTouchListener { view, event ->
+                    when (event.action) {
+                        MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
+                            val screenWidth = view.width.toFloat()
+                            val touchX = event.x
+
+                            // Нормализуем: 0.0 (левый край) -> 1.0 (правый край)
+                            val normalizedX = touchX / screenWidth
+
+                            // Преобразуем в диапазон [-1, 1]: центр = 0
+                            val horizontalInput = (normalizedX - 0.5f) * 2.0f
+
+                            // Ограничиваем диапазон
+                            val clampedInput = horizontalInput.coerceIn(-1.0f, 1.0f)
+
+                            onHorizontalMove(clampedInput)
+                        }
+
+                        MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                            // Отпустили палец - останавливаем движение
+                            onHorizontalMove(0.0f)
+                        }
+                    }
+                    true // Обрабатываем событие
+                }
             }
         })
     }

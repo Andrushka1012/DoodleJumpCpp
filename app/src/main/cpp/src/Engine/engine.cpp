@@ -33,6 +33,10 @@ namespace DoodleJumpGame {
         }
     }
 
+    void Engine::onHorizontalMove(float x) {
+        player.setHorizontalMovement(x);
+    }
+
     void Engine::drawFrame() {
         if (camera.isAbove(Y_NORMALIZE_THRESHOLD)) {
             normalizeYPosition();
@@ -101,6 +105,12 @@ namespace DoodleJumpGame {
     void setViewport(int width, int height) {
         if (g_engine) {
             g_engine->setViewport(width, height);
+        }
+    }
+
+    void onHorizontalMove(float x) {
+        if (g_engine) {
+            g_engine->onHorizontalMove(x);
         }
     }
 }

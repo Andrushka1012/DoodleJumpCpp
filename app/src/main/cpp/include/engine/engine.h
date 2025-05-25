@@ -15,6 +15,7 @@ namespace DoodleJumpGame {
         void start();
         void drawFrame();
         void setViewport(int width, int height);
+        void onHorizontalMove(float x);
 
     private:
         static constexpr float Y_NORMALIZE_THRESHOLD = 10000.0f;
@@ -38,5 +39,7 @@ namespace DoodleJumpGame {
     void drawFrame();
 
     void setViewport(int width, int height);
+
+    void onHorizontalMove(float x);
 
 } 

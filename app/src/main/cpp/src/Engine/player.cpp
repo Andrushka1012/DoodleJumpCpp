@@ -23,6 +23,11 @@ namespace DoodleJumpGame {
     void Player::update(float deltaTime) {
         velocityY += GameConstants::PLAYER_GRAVITY * deltaTime;
         setY(getY() + velocityY * deltaTime);
+
+        if (horizontalMovement != 0.0f) {
+            float moveSpeed = GameConstants::PLAYER_HORIZONTAL_MOVE_SPEED;
+            setXWithScreenWrap(getX() + horizontalMovement * moveSpeed * deltaTime);
+        }
     }
 
     void Player::jump() {

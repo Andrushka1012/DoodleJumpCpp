@@ -11,23 +11,32 @@ using std::string;
 
 extern "C" JNIEXPORT void JNICALL
 Java_com_example_learncpp_MainActivity_startEngine(
-        JNIEnv* env,
+        JNIEnv *env,
         jobject /* this */) {
     DoodleJumpGame::startEngine();
 }
 
 extern "C" JNIEXPORT void JNICALL
 Java_com_example_learncpp_MainActivity_drawFrame(
-        JNIEnv* env,
+        JNIEnv *env,
         jobject /* this */) {
     DoodleJumpGame::drawFrame();
 }
 
 extern "C" JNIEXPORT void JNICALL
 Java_com_example_learncpp_MainActivity_setViewport(
-        JNIEnv* env,
+        JNIEnv *env,
         jobject /* this */,
         jint width,
         jint height) {
     DoodleJumpGame::setViewport(width, height);
+}
+
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_learncpp_MainActivity_onHorizontalMove(
+        JNIEnv *env,
+        jobject /* this */,
+        jfloat x) {
+    DoodleJumpGame::onHorizontalMove(x);
 }
