@@ -16,6 +16,7 @@ namespace DoodleJumpGame {
 
         float width = 32.0f;
         float height = 32.0f;
+        bool isVisible = true;
 
         [[nodiscard]] float getX() const {
             return position.x;
