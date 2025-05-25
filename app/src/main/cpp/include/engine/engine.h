@@ -15,7 +15,8 @@ namespace DoodleJumpGame {
 
         ~Engine();
 
-        void start();
+        void launch();
+        void startGame();
         void drawFrame();
         void setViewport(int width, int height);
         void onHorizontalMove(float x);
@@ -30,7 +31,6 @@ namespace DoodleJumpGame {
         Camera screenController;
         std::vector<Platform> platforms;
 
-        void initializeGame();
         void normalizeYPosition();
         void updateGamePosition();
         void removeInvisibleObjects();
@@ -48,4 +48,5 @@ namespace DoodleJumpGame {
 
     void onHorizontalMove(float x);
 
+    void startGame();
 } 

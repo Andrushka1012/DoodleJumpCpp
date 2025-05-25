@@ -7,10 +7,26 @@ import android.view.MotionEvent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
@@ -32,6 +48,7 @@ class MainActivity : ComponentActivity() {
     }
 
     external fun startEngine()
+    external fun startGame()
     external fun drawFrame()
     external fun setViewport(width: Int, height: Int)
     external fun onHorizontalMove(x: Float)
@@ -39,12 +56,17 @@ class MainActivity : ComponentActivity() {
     @SuppressLint("ClickableViewAccessibility")
     @Composable
     fun MainScreen() {
+        var ready by remember { mutableStateOf(false) }
+        var isPlaying by remember { mutableStateOf(false) }
+        var currentResult by remember { mutableIntStateOf(-1) }
+
         AndroidView(factory = { context ->
             GLSurfaceView(context).apply {
                 setEGLContextClientVersion(2)
                 setRenderer(object : GLSurfaceView.Renderer {
                     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
                         startEngine()
+                        ready = true
                     }
 
                     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
@@ -52,7 +74,9 @@ class MainActivity : ComponentActivity() {
                     }
 
                     override fun onDrawFrame(gl: GL10?) {
-                        drawFrame()
+                        if (ready && isPlaying) {
+                            drawFrame()
+                        }
                     }
                 })
 
@@ -83,6 +107,37 @@ class MainActivity : ComponentActivity() {
                 }
             }
         })
+
+        if (!ready) CircularProgressIndicator(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.primary
+        )
+
+        if (!isPlaying && ready) {
+            GameMenu(
+                onStartGame = {
+                    if (ready) {
+                        startGame()
+                        isPlaying = true
+                    }
+                }
+            )
+        }
+    }
+
+    @Composable
+    fun GameMenu(onStartGame: () -> Unit) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(text = "Doodle Jump", style = MaterialTheme.typography.headlineLarge.copy(color = Color.White))
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(onClick = onStartGame) {
+                Text(text = "Start Game")
+            }
+        }
     }
 
     companion object {

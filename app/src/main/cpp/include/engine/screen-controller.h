@@ -37,6 +37,8 @@ namespace DoodleJumpGame {
             };
         }
 
+        void reset();
+
     private:
         Position cameraPosition;
         float maxCameraHeight = 0.0f;

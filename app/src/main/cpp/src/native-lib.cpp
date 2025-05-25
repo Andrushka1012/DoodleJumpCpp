@@ -40,3 +40,9 @@ Java_com_example_learncpp_MainActivity_onHorizontalMove(
         jfloat x) {
     DoodleJumpGame::onHorizontalMove(x);
 }
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_learncpp_MainActivity_startGame(
+        JNIEnv *env,
+        jobject /* this */) {
+    DoodleJumpGame::startGame();
+}

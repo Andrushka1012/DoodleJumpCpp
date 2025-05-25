@@ -13,17 +13,18 @@ namespace DoodleJumpGame {
 
     Engine::~Engine() = default; // Or define custom cleanup logic if necessary
 
-    void Engine::start() {
+    void Engine::launch() {
         if (!renderer || !renderer->initialize()) {
             // TODO: Handle draw initialization failure
             return;
         }
-        initializeGame();
+        screenController = Camera(0.0f, GameConstants::WORLD_HEIGHT);
     }
 
-    void Engine::initializeGame() {
+    void Engine::startGame() {
         player = Player(0.0f, 0.0f);
-        screenController = Camera(0.0f, GameConstants::WORLD_HEIGHT);
+        screenController.reset();
+
 
         platforms.emplace_back(0.0f, 0.0);
         platforms.emplace_back(0.5f, 0.1);
@@ -129,8 +130,8 @@ namespace DoodleJumpGame {
         if (!g_engine) {
             auto renderer = std::make_unique<Renderer>();
             g_engine = std::make_unique<Engine>(std::move(renderer));
+            g_engine->launch();
         }
-        g_engine->start();
     }
 
     void drawFrame() {
@@ -148,6 +149,12 @@ namespace DoodleJumpGame {
     void onHorizontalMove(float x) {
         if (g_engine) {
             g_engine->onHorizontalMove(x);
+        }
+    }
+
+    void startGame() {
+        if (g_engine) {
+            g_engine->startGame();
         }
     }
 }

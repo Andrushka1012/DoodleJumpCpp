@@ -18,4 +18,9 @@ namespace DoodleJumpGame {
             cameraPosition.y = std::max(position.y, minDownPosition);
         }
     }
+
+    void Camera::reset(){
+        cameraPosition  = Position(0, 0);
+        maxCameraHeight = 0.0f;
+    }
 }
