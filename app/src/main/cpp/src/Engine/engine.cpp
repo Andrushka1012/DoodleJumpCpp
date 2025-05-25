@@ -24,6 +24,8 @@ namespace DoodleJumpGame {
     void Engine::initializeGame() {
         player = Player(0.0f, 0.0f);
         camera = Camera(0.0f, GameConstants::WORLD_HEIGHT);
+
+        platforms.emplace_back(0.5f, 10.0f);
     }
 
     void Engine::setViewport(int width, int height) {
@@ -73,6 +75,11 @@ namespace DoodleJumpGame {
 
         player.update(deltaTime);
 
+
+        for (const auto& platform : platforms) {
+
+        }
+
         if (camera.isAbove(player.getPosition())) {
             player.jump();
         }
@@ -82,6 +89,11 @@ namespace DoodleJumpGame {
     void Engine::renderObjects() {
         if (renderer) {
             renderer->clear(0.0f, 0.0f, 0.0f, 1.0f);
+
+            for (const auto& platform : platforms) {
+                platform.renderOn(renderer.get(), camera);
+            }
+
             player.renderOn(renderer.get(), camera);
         }
     }

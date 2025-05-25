@@ -2,7 +2,7 @@
 
 namespace DoodleJumpGame {
 
-    void Player::renderOn(Renderer *renderer, Camera camera) {
+    void Player::renderOn(Renderer *renderer, Camera camera) const {
         if (!renderer || !visible) {
             return;
         }
