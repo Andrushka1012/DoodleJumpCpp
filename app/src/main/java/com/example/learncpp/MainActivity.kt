@@ -3,7 +3,6 @@ package com.example.learncpp
 import android.annotation.SuppressLint
 import android.opengl.GLSurfaceView
 import android.os.Bundle
-import android.util.Log
 import android.view.MotionEvent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -51,6 +50,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    var isPlaying by mutableStateOf(false)
+    var currentResult by mutableIntStateOf(-1)
+
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,11 +60,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Scaffold(
-                modifier = Modifier.fillMaxSize(),
-                content = { paddingValues ->
+                modifier = Modifier.fillMaxSize(), content = { paddingValues ->
                     MainScreen()
-                }
-            )
+                })
         }
     }
 
@@ -76,8 +76,6 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun MainScreen() {
         var ready by remember { mutableStateOf(false) }
-        var isPlaying by remember { mutableStateOf(false) }
-        var currentResult by remember { mutableIntStateOf(-1) }
 
         AndroidView(factory = { context ->
             GLSurfaceView(context).apply {
@@ -128,8 +126,7 @@ class MainActivity : ComponentActivity() {
         })
 
         if (!ready) CircularProgressIndicator(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.primary
+            modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.primary
         )
 
         if (!isPlaying && ready) {
@@ -139,19 +136,29 @@ class MainActivity : ComponentActivity() {
                         startGame()
                         isPlaying = true
                     }
-                }
-            )
+                })
         }
     }
 
     @Composable
     fun GameMenu(onStartGame: () -> Unit) {
         Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
         ) {
-            Text(text = "Doodle Jump", style = MaterialTheme.typography.headlineLarge.copy(color = Color.White))
+            Text(
+                text = if (currentResult < 0) "Doodle Jump" else "Game Over",
+                style = MaterialTheme.typography.headlineLarge.copy(
+                    color = Color.White
+                )
+            )
+            if (currentResult >= 0) {
+                Text(
+                    text = "Your score: $currentResult",
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = Color.White
+                    )
+                )
+            }
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = onStartGame) {
                 Text(text = "Start Game")
@@ -160,6 +167,7 @@ class MainActivity : ComponentActivity() {
     }
 
     fun onGameOver(score: Float) {
-        Log.d("qwe", "Game Over! Score: $score")
+        isPlaying = false
+        currentResult = score.toInt()
     }
 }
