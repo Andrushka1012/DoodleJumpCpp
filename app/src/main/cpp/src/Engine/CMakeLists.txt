@@ -4,6 +4,7 @@ add_library(Engine STATIC
         player.cpp
         camera.cpp
         platform.cpp
+        game-object.cpp
 )
 
 target_include_directories(Engine PUBLIC ../../include)

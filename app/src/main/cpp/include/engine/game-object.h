@@ -16,7 +16,6 @@ namespace DoodleJumpGame {
 
         float width = 32.0f;
         float height = 32.0f;
-        bool visible = true;
 
         [[nodiscard]] float getX() const {
             return position.x;
@@ -30,30 +29,15 @@ namespace DoodleJumpGame {
             return position;
         }
 
+        [[nodiscard]] bool isColliding(const GameObject &other) const;
+
     protected:
         GameObject(float x, float y, float width, float height)
                 : position(x, y), width(width), height(height) {}
 
-        void setXWithScreenWrap(float newX) {
+        void setXWithScreenWrap(float newX);
 
-            if (newX < -1.0f) {
-                position.x = 1.0f;
-            } else if (newX > 1.0f) {
-                position.x = -1.0f;
-            } else {
-                position.x = newX;
-            }
-        }
-
-        void setXWithBoundaryClamp(float newX) {
-            if (newX < -1.0f) {
-                position.x = -1.0f;
-            } else if (newX > 1.0f) {
-                position.x = 1.0f;
-            } else {
-                position.x = newX;
-            }
-        }
+        void setXWithBoundaryClamp(float newX);
 
         void setY(float newY) {
             position.y = newY;

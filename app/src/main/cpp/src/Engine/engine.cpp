@@ -60,10 +60,10 @@ namespace DoodleJumpGame {
 
         if (player.isFalling()) {
             for (const auto &platform: platforms) {
-//                if (platform.isColliding(player)) {
-//                    player.jump();
-//                    break; // Exit loop after first collision
-//                }
+                if (platform.isColliding(player)) {
+                    player.jump();
+                    break; // Exit loop after first collision
+                }
             }
         }
 
