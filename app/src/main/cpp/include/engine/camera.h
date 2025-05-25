@@ -32,8 +32,12 @@ namespace DoodleJumpGame {
         }
 
 
-        float transformToOnScreenSize(float size) {
+        float transformToOnScreenWidth(float size) {
             return size / 200;
+        }
+
+        float transformToOnScreenHeight(float size) {
+            return size / 400;
         }
 
     private:
