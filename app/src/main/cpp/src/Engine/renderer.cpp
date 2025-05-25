@@ -28,13 +28,14 @@ namespace DoodleJumpGame {
         constexpr std::array<float, 8> QUAD_VERTICES = {
                 -0.5f, -0.5f,
                 0.5f, -0.5f,
-                0.5f,  0.5f,
-                -0.5f,  0.5f
+                0.5f, 0.5f,
+                -0.5f, 0.5f
         };
 
         void logError(const char *msg) { __android_log_print(ANDROID_LOG_ERROR, "Renderer", "%s", msg); }
-        void logInfo(const char *fmt, float a=0,float b=0,float c=0,float d=0,float e=0) {
-            __android_log_print(ANDROID_LOG_INFO, "Renderer", fmt, a,b,c,d,e);
+
+        void logInfo(const char *fmt, float a = 0, float b = 0, float c = 0, float d = 0, float e = 0) {
+            __android_log_print(ANDROID_LOG_INFO, "Renderer", fmt, a, b, c, d, e);
         }
     }
 
@@ -48,12 +49,18 @@ namespace DoodleJumpGame {
     Renderer &Renderer::operator=(Renderer &&o) noexcept {
         if (this != &o) {
             cleanup();
-            shaderProgram   = o.shaderProgram;   o.shaderProgram = 0;
-            quadVbo         = o.quadVbo;         o.quadVbo = 0;
-            positionAttr    = o.positionAttr;    o.positionAttr = 0;
-            transformUniform= o.transformUniform; o.transformUniform = 0;
-            colorUniform    = o.colorUniform;    o.colorUniform = 0;
-            isValid         = o.isValid;         o.isValid = false;
+            shaderProgram = o.shaderProgram;
+            o.shaderProgram = 0;
+            quadVbo = o.quadVbo;
+            o.quadVbo = 0;
+            positionAttr = o.positionAttr;
+            o.positionAttr = 0;
+            transformUniform = o.transformUniform;
+            o.transformUniform = 0;
+            colorUniform = o.colorUniform;
+            o.colorUniform = 0;
+            isValid = o.isValid;
+            o.isValid = false;
         }
         return *this;
     }
@@ -81,8 +88,14 @@ namespace DoodleJumpGame {
     }
 
     void Renderer::cleanup() {
-        if (quadVbo) { glDeleteBuffers(1, &quadVbo); quadVbo = 0; }
-        if (shaderProgram) { glDeleteProgram(shaderProgram); shaderProgram = 0; }
+        if (quadVbo) {
+            glDeleteBuffers(1, &quadVbo);
+            quadVbo = 0;
+        }
+        if (shaderProgram) {
+            glDeleteProgram(shaderProgram);
+            shaderProgram = 0;
+        }
         isValid = false;
     }
 
@@ -111,10 +124,10 @@ namespace DoodleJumpGame {
         float c = cosf(rad);
         float s = sinf(rad);
         float m[16] = {
-                c*sx,  s*sx, 0, 0,
-                -s*sy,  c*sy, 0, 0,
-                0 ,     0, 1, 0,
-                x,     y, 0, 1
+                c * sx, s * sx, 0, 0,
+                -s * sy, c * sy, 0, 0,
+                0, 0, 1, 0,
+                x, y, 0, 1
         };
         glUseProgram(shaderProgram);
         glUniformMatrix4fv(transformUniform, 1, GL_FALSE, m);
@@ -122,7 +135,7 @@ namespace DoodleJumpGame {
 
     void Renderer::resetTransform() {
         if (!isValid) return;
-        const float I[16] = {1,0,0,0,  0,1,0,0,  0,0,1,0,  0,0,0,1};
+        const float I[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
         glUseProgram(shaderProgram);
         glUniformMatrix4fv(transformUniform, 1, GL_FALSE, I);
     }
@@ -138,8 +151,15 @@ namespace DoodleJumpGame {
         glDisableVertexAttribArray(positionAttr);
     }
 
+    void Renderer::draw(RenderObject renderObject) {
+        setColor(renderObject.color.r, renderObject.color.g, renderObject.color.b, renderObject.color.a);
+        setTransform(renderObject.x, renderObject.y, renderObject.width, renderObject.height, 0.0f);
+        drawQuad();
+
+    }
+
     /*======================  Internal  ======================*/
-    GLuint Renderer::compileShader(GLenum type, const char* src) const {
+    GLuint Renderer::compileShader(GLenum type, const char *src) const {
         GLuint sh = glCreateShader(type);
         glShaderSource(sh, 1, &src, nullptr);
         glCompileShader(sh);
@@ -154,36 +174,46 @@ namespace DoodleJumpGame {
         GLuint vs = compileShader(GL_VERTEX_SHADER, VERTEX_SHADER_SOURCE);
         if (!vs) return 0;
         GLuint fs = compileShader(GL_FRAGMENT_SHADER, FRAGMENT_SHADER_SOURCE);
-        if (!fs) { glDeleteShader(vs); return 0; }
+        if (!fs) {
+            glDeleteShader(vs);
+            return 0;
+        }
         GLuint prog = glCreateProgram();
         glAttachShader(prog, vs);
         glAttachShader(prog, fs);
         glLinkProgram(prog);
         glDeleteShader(vs);
         glDeleteShader(fs);
-        if (!checkProgramLinking(prog)) { glDeleteProgram(prog); return 0; }
+        if (!checkProgramLinking(prog)) {
+            glDeleteProgram(prog);
+            return 0;
+        }
         return prog;
     }
 
     void Renderer::createQuadBuffer() {
         glGenBuffers(1, &quadVbo);
         glBindBuffer(GL_ARRAY_BUFFER, quadVbo);
-        glBufferData(GL_ARRAY_BUFFER, QUAD_VERTICES.size()*sizeof(float), QUAD_VERTICES.data(), GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, QUAD_VERTICES.size() * sizeof(float), QUAD_VERTICES.data(), GL_STATIC_DRAW);
     }
 
     bool Renderer::checkShaderCompilation(GLuint sh) const {
-        GLint ok; glGetShaderiv(sh, GL_COMPILE_STATUS, &ok);
-        if(!ok){
-            char log[256]; glGetShaderInfoLog(sh, 256, nullptr, log);
+        GLint ok;
+        glGetShaderiv(sh, GL_COMPILE_STATUS, &ok);
+        if (!ok) {
+            char log[256];
+            glGetShaderInfoLog(sh, 256, nullptr, log);
             logError(log);
         }
         return ok == GL_TRUE;
     }
 
     bool Renderer::checkProgramLinking(GLuint prog) const {
-        GLint ok; glGetProgramiv(prog, GL_LINK_STATUS, &ok);
-        if(!ok){
-            char log[256]; glGetProgramInfoLog(prog, 256, nullptr, log);
+        GLint ok;
+        glGetProgramiv(prog, GL_LINK_STATUS, &ok);
+        if (!ok) {
+            char log[256];
+            glGetProgramInfoLog(prog, 256, nullptr, log);
             logError(log);
         }
         return ok == GL_TRUE;

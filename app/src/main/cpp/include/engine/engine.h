@@ -5,7 +5,7 @@
 #include "player.h"
 #include "camera.h"
 #include "platform.h"
-#include "renderable.h"
+#include "game-object.h"
 #include <vector>
 
 namespace DoodleJumpGame {
@@ -34,7 +34,7 @@ namespace DoodleJumpGame {
         void normalizeYPosition();
         void updateGamePosition();
         void drawObjects();
-        void draw(const Renderable &renderable);
+        void draw(const GameObject &renderable);
         float calculateDeltaTime();
     };
 

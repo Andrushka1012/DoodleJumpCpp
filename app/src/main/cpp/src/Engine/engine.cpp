@@ -15,7 +15,7 @@ namespace DoodleJumpGame {
 
     void Engine::start() {
         if (!renderer || !renderer->initialize()) {
-            // TODO: Handle render initialization failure
+            // TODO: Handle draw initialization failure
             return;
         }
         initializeGame();
@@ -45,7 +45,7 @@ namespace DoodleJumpGame {
         }
 
         updateGamePosition();
-        renderObjects();
+        drawObjects();
     }
 
     void Engine::normalizeYPosition() {
@@ -58,8 +58,13 @@ namespace DoodleJumpGame {
         player.update(deltaTime);
 
 
-        for (const auto& platform : platforms) {
-
+        if (player.isFalling()) {
+            for (const auto &platform: platforms) {
+//                if (platform.isColliding(player)) {
+//                    player.jump();
+//                    break; // Exit loop after first collision
+//                }
+            }
         }
 
         if (camera.isAbove(player.getPosition())) {
@@ -68,15 +73,15 @@ namespace DoodleJumpGame {
 
     }
 
-    void Engine::renderObjects() {
+    void Engine::drawObjects() {
         if (renderer) {
             renderer->clear(0.0f, 0.0f, 0.0f, 1.0f);
 
-            for (const auto& platform : platforms) {
-                platform.renderOn(renderer.get(), camera);
+            for (const Platform &platform: platforms) {
+                draw(platform);
             }
 
-            player.renderOn(renderer.get(), camera);
+            draw(player);
         }
     }
 
@@ -97,6 +102,15 @@ namespace DoodleJumpGame {
         float deltaTime = std::chrono::duration<float>(duration).count();
 
         return std::min(deltaTime, 0.033f); // Cap delta time to 30 FPS (1/30 seconds)
+    }
+
+    void Engine::draw(const GameObject &renderable) {
+        if (renderer) {
+            auto renderObject = renderable.getRenderObject();
+            auto adjustedObject = camera.adjustToScreen(renderObject);
+
+            renderer->draw(adjustedObject);
+        }
     }
 
     // C-style API implementation

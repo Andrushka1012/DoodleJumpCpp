@@ -6,9 +6,9 @@
 #include "render-object.h"
 
 namespace DoodleJumpGame {
-    class Renderable {
+    class GameObject {
     public:
-        virtual ~Renderable() = default;
+        virtual ~GameObject() = default;
 
         virtual RenderObject getRenderObject() const = 0;
 
@@ -31,7 +31,7 @@ namespace DoodleJumpGame {
         }
 
     protected:
-        Renderable(float x, float y, float width, float height)
+        GameObject(float x, float y, float width, float height)
                 : position(x, y), width(width), height(height) {}
 
         void setXWithScreenWrap(float newX) {
