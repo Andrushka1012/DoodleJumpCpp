@@ -10,6 +10,7 @@ namespace DoodleJumpGame::GameConstants {
     constexpr float PLAYER_GRAVITY = -2.2f;
     constexpr float PLAYER_JUMP_FORCE = 1.5f;
     constexpr float PLAYER_HORIZONTAL_MOVE_SPEED = 4;
+    constexpr float PLAYER_END_OF_GAME_FALLING_OFFSET = 2;
 
 
     // Platform constants

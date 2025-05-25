@@ -83,6 +83,12 @@ namespace DoodleJumpGame {
 
     void Engine::removeInvisibleObjects() {
         // TODO: Implement logic to remove platforms that are no longer visible
+
+        if (player.getPosition().isBelow(screenController.getY() - GameConstants::PLAYER_END_OF_GAME_FALLING_OFFSET)) {
+            // If player falls below the screen, reset the game
+            startGame();
+            return;
+        }
     }
 
     void Engine::drawObjects() {

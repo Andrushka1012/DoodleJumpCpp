@@ -33,9 +33,27 @@ import javax.microedition.khronos.opengles.GL10
 
 class MainActivity : ComponentActivity() {
 
+    companion object {
+        private var instance: MainActivity? = null
+
+        init {
+            System.loadLibrary("DoodleJumpCpp")
+        }
+
+        fun getInstance(): MainActivity? = instance
+
+        @JvmStatic
+        fun notifyGameOverFromNative(score: Int) {
+            instance?.runOnUiThread {
+                instance?.onGameOver(score)
+            }
+        }
+    }
+
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        instance = this
         enableEdgeToEdge()
         setContent {
             Scaffold(
@@ -140,10 +158,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    companion object {
-        // Used to load the 'DoodleJumpCpp' library on application startup.
-        init {
-            System.loadLibrary("DoodleJumpCpp")
-        }
+    fun onGameOver(score: Int) {
+        // TODO: обработай окончание игры (например, покажи меню, сохрани результат)
     }
 }
