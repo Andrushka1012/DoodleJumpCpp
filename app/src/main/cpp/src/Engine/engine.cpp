@@ -14,7 +14,7 @@ namespace DoodleJumpGame {
     Engine::~Engine() = default; // Or define custom cleanup logic if necessary
 
     void Engine::start() {
-        if (!renderer || renderer->initialize()) {
+        if (!renderer || !renderer->initialize()) {
             // TODO: Handle render initialization failure
             return;
         }
@@ -22,7 +22,8 @@ namespace DoodleJumpGame {
     }
 
     void Engine::initializeGame() {
-        player = std::make_unique<Player>(0.0f, 0.0f);
+        player = Player(0.0f, 0.0f);
+        camera = Camera(0.0f, 0.0f);
     }
 
     void Engine::setViewport(int width, int height) {
@@ -32,12 +33,21 @@ namespace DoodleJumpGame {
     }
 
     void Engine::drawFrame() {
-        // TODO: Game logic here
+        if (camera.isAbove(Y_NORMALIZE_THRESHOLD)) {
+            normalizeYPosition();
+        }
+
+        player.update(0.016f);
+
+
 
         if (renderer) {
             renderer->render();
         }
+    }
 
+    void Engine::normalizeYPosition() {
+        // TODO: Implement Y position normalization logic
     }
 
 

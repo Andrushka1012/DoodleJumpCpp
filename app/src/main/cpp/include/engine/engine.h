@@ -3,6 +3,7 @@
 #include "renderer.h"
 #include "memory"
 #include "player.h"
+#include "camera.h"
 
 namespace DoodleJumpGame {
     class Engine {
@@ -19,7 +20,8 @@ namespace DoodleJumpGame {
         static constexpr float Y_NORMALIZE_THRESHOLD = 10000.0f;
 
         std::unique_ptr<Renderer> renderer;
-        std::unique_ptr<Player> player;
+        Player player;
+        Camera camera;
 
         void initializeGame();
         void normalizeYPosition();

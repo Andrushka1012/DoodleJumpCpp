@@ -1,57 +1,65 @@
 #pragma once
 
 #include "renderer.h"
+#include "position.h"
 
-class Renderable {
-public:
-    virtual ~Renderable() = default;
+namespace DoodleJumpGame {
+    class Renderable {
+    public:
+        virtual ~Renderable() = default;
 
-    virtual void renderOn(DoodleJumpGame::Renderer *renderer) = 0;
+        virtual void renderOn(DoodleJumpGame::Renderer *renderer) = 0;
 
-    virtual void update(float deltaTime) = 0;
+        virtual void update(float deltaTime) = 0;
 
-    float width = 32.0f;
-    float height = 32.0f;
-    bool visible = true;
+        float width = 32.0f;
+        float height = 32.0f;
+        bool visible = true;
 
-    float getX() const {
-        return x;
-    }
-
-    float getY() const {
-        return y;
-    }
-
-protected:
-    Renderable(float x, float y, float width, float height)
-            : x(x), y(y), width(width), height(height) {}
-
-    void setXWithScreenWrap(float newX) {
-        if (newX < -1.0f) {
-            x = 1.0f;
-        } else if (newX > 1.0f) {
-            x = -1.0f;
-        } else {
-            x = newX;
+        [[nodiscard]] float getX() const {
+            return position.x;
         }
-    }
 
-    void setXWithBoundaryClamp(float newX) {
-        if (newX < -1.0f) {
-            x = -1.0f;
-        } else if (newX > 1.0f) {
-            x = 1.0f;
-        } else {
-            x = newX;
+        [[nodiscard]] float getY() const {
+            return position.y;
         }
-    }
 
-    void setY(float newY) {
-        y = newY;
+        [[nodiscard]] Position getPosition() const {
+            return position;
+        }
+
+    protected:
+        Renderable(float x, float y, float width, float height)
+                : position(x, y), width(width), height(height) {}
+
+        void setXWithScreenWrap(float newX) {
+
+            if (newX < -1.0f) {
+                position.x = 1.0f;
+            } else if (newX > 1.0f) {
+                position.x = -1.0f;
+            } else {
+                position.x = newX;
+            }
+        }
+
+        void setXWithBoundaryClamp(float newX) {
+            if (newX < -1.0f) {
+                position.x = -1.0f;
+            } else if (newX > 1.0f) {
+                position.x = 1.0f;
+            } else {
+                position.x = newX;
+            }
+        }
+
+        void setY(float newY) {
+            position.y = newY;
+        };
+
+
+    private:
+        Position position;
     };
 
-
-private:
-    float x = 0.0f;
-    float y = 0.0f;
-};
+}

@@ -6,7 +6,7 @@
 namespace DoodleJumpGame {
     class Player final : public Renderable {  // final = "sealed class"
     public:
-        Player(float startX, float startY)
+        Player(float startX = 0, float startY = 0)
                 : Renderable(startX, startY, 32.0f, 32.0f) {}
 
         void renderOn(Renderer *render) override;
