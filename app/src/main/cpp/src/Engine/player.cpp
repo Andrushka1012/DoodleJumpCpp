@@ -2,19 +2,19 @@
 
 namespace DoodleJumpGame {
 
-    void Player::renderOn(Renderer *renderer, float cameraOffsetY) {
+    void Player::renderOn(Renderer *renderer, Camera camera) {
         if (!renderer || !visible) {
             return;
         }
 
-//        Position framePosition = getPosition() - cameraPosition;
+        Position onScreenPosition = camera.transformToOnScreenPosition(getPosition());
 
         renderer->setColor(0.0f, 1.0f, 0.0f, 1.0f);
         renderer->setTransform(
-                getX(),
-                getY() ,
-                width / 200,
-                height / 200,
+                onScreenPosition.x,
+                onScreenPosition.y,
+                camera.transformToOnScreenSize(width),
+                camera.transformToOnScreenSize(height),
                 0.0f
         );
         renderer->drawQuad();
