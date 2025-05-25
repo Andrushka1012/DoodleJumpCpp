@@ -5,12 +5,10 @@
 namespace DoodleJumpGame {
     class Camera {
     public:
-        Camera() = default;
+        explicit Camera(float startY = 0.0f, float worldHeight = 100.0f)
+            : cameraPosition(0, startY), worldViewHeight(worldHeight) {}
 
-        Camera(float startY)
-                : cameraPosition(0, startY) {}
-
-        void setAspectRatio(float ratio) { aspectRatio = ratio; } // TODO: check how it handles square screens
+        void setAspectRatio(float ratio) { aspectRatio = ratio; }
 
         [[nodiscard]] bool isAbove(float value) const {
             return cameraPosition.isAbove(value);
@@ -24,18 +22,26 @@ namespace DoodleJumpGame {
             return cameraPosition.y;
         }
 
-        Position transformToOnScreenPosition(Position position);
+        [[nodiscard]] Position transformToOnScreenPosition(Position worldPos) const {
+            float relativeY = worldPos.y - cameraPosition.y;
 
-        float transformToOnScreenWidth(float size) {
-            return size / (200.0f * aspectRatio);
+            float screenY = (relativeY / (worldViewHeight * 0.5f));
+            float screenX = worldPos.x / (worldViewHeight * 0.5f * aspectRatio);
+
+            return {screenX, screenY};
         }
 
-        float transformToOnScreenHeight(float size) {
-            return size / 200.0f;
+        [[nodiscard]] float transformToOnScreenWidth(float worldSize) const {
+            return worldSize / (worldViewHeight * 0.5f);
+        }
+
+        [[nodiscard]] float transformToOnScreenHeight(float height) const {
+            return height / (worldViewHeight * 0.5f) * aspectRatio;
         }
 
     private:
         Position cameraPosition;
         float aspectRatio = 1.0f;
+        float worldViewHeight = 100.0f;  // Высота видимой области в игровых единицах
     };
 }
