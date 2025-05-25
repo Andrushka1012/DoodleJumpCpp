@@ -21,6 +21,10 @@ namespace DoodleJumpGame {
             horizontalMovement = value;
         }
 
+        bool isFalling() const {
+            return velocityY <= 0.0f;
+        }
+
     private:
         float velocityY = 0.0f;
         float horizontalMovement = 0.0f;
