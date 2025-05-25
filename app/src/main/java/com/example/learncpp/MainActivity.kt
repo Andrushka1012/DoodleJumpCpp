@@ -1,6 +1,11 @@
 package com.example.learncpp
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.opengl.GLSurfaceView
 import android.os.Bundle
 import android.view.MotionEvent
@@ -31,7 +36,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity(), SensorEventListener {
 
     companion object {
         private var instance: MainActivity? = null
@@ -53,10 +58,16 @@ class MainActivity : ComponentActivity() {
     var isPlaying by mutableStateOf(false)
     var currentResult by mutableIntStateOf(-1)
 
+    private lateinit var sensorManager: SensorManager
+    private var accelerometer: Sensor? = null
+
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         instance = this
+
+        sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         enableEdgeToEdge()
         setContent {
             Scaffold(
@@ -64,6 +75,30 @@ class MainActivity : ComponentActivity() {
                     MainScreen()
                 })
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        accelerometer?.also {
+            sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_GAME)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        sensorManager.unregisterListener(this)
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        if (event?.sensor?.type == Sensor.TYPE_ACCELEROMETER && isPlaying) {
+            val x = event.values[0] // Tilt left/right
+            val normalized = (x / SensorManager.GRAVITY_EARTH).coerceIn(-1f, 1f)
+            onHorizontalMove(-normalized) // Negative to match screen orientation
+        }
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        // Not needed
     }
 
     external fun startEngine()

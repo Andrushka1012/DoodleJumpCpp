@@ -105,30 +105,23 @@ namespace DoodleJumpGame {
         if (platforms.size() >= required) return;
 
         while (platforms.size() < required) {
-            float newX = randomFloat(0.0f, 1.8f) - 0.9f;
+            float newX = randomFloat(-0.9f, 0.9f);  // Clean horizontal range
 
-            float gap = randomFloat(0.2f, 0.4f);
+            float gap = randomFloat(GameConstants::MIN_PLATFORM_GAP, GameConstants::MAX_PLATFORM_GAP);
             float newY = highestPlatformY + gap;
 
-            float screenTopY = screenController.getCameraY() + 2.0f;
-            if (screenTopY > 3.0f && newY < screenTopY - 0.05f) {
-                newY = screenTopY + 0.05f;
+            // Make sure newY is slightly *above* the visible screen
+            float screenTopY = screenController.getCameraY();
+            if (screenController.getCameraY() > GameConstants::WORLD_HEIGHT) {
+                screenTopY += GameConstants::WORLD_HEIGHT;
             }
 
-            if (newY - highestPlatformY < GameConstants::MIN_PLATFORM_GAP) {
-                continue; // Ensure a minimum gap between platforms
-            }
-
+            newY = std::max(newY, screenTopY + 0.05f);  // Only push up if it's still inside the screen
 
             auto type = getRandomPlatformType();
             float offset = 0;
             if (type == PlatformType::Moving) {
-                bool isLeft = randomBool();
-                if (isLeft) {
-                    offset = -1;
-                } else {
-                    offset = 1;
-                }
+                offset = randomBool() ? -1 : 1;
             }
 
             Platform candidate(newX, newY, type, offset);
@@ -139,6 +132,7 @@ namespace DoodleJumpGame {
             }
         }
     }
+
 
     int Engine::desiredPlatformCount() const {
         float heightFactor = screenController.getMaxCameraHeightRecord() * 10; // Remove each 1 after one screen height units
