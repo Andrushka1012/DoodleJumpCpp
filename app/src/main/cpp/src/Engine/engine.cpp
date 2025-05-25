@@ -37,7 +37,9 @@ namespace DoodleJumpGame {
             normalizeYPosition();
         }
 
-        player.update(0.016f);
+        float deltaTime = calculateDeltaTime();
+
+        player.update(deltaTime);
 
 
 
@@ -48,6 +50,24 @@ namespace DoodleJumpGame {
 
     void Engine::normalizeYPosition() {
         // TODO: Implement Y position normalization logic
+    }
+
+    float Engine::calculateDeltaTime() {
+        auto currentTime = std::chrono::steady_clock::now();
+
+        static bool firstFrame = true;
+        if (firstFrame) {
+            lastFrameTime = currentTime;
+            firstFrame = false;
+            return 0.016f; // Initial delta time for the first frame (assuming 60 FPS)
+        }
+
+        auto duration = currentTime - lastFrameTime;
+        lastFrameTime = currentTime;
+
+        float deltaTime = std::chrono::duration<float>(duration).count();
+
+        return std::min(deltaTime, 0.033f); // Cap delta time to 30 FPS (1/30 seconds)
     }
 
 
