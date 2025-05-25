@@ -19,6 +19,8 @@ namespace DoodleJumpGame::GameConstants {
 
     // Camera constants
     constexpr float CAMERA_OFFSET_Y = -0.7f;
+    constexpr float CAMERA_FOLLOW_OFFSET_Y = 0.55f;
+    constexpr float CAMERA_MAX_FOLLOW_DOWN = 1;
 
 }
 

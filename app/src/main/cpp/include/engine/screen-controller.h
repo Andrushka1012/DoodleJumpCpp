@@ -10,21 +10,23 @@ namespace DoodleJumpGame {
         explicit Camera(float startY = 0.0f, float worldHeight = 100.0f)
                 : cameraPosition(0, startY), worldViewHeight(worldHeight) {}
 
-        void setAspectRatio(float ratio) { aspectRatio = ratio; }
+        void setAspectRatio(const float ratio) { aspectRatio = ratio; }
 
-        [[nodiscard]] bool isCameraAbove(float value) const {
+        [[nodiscard]] bool isCameraAbove(const float value) const {
             return cameraPosition.isAbove(value);
         }
 
-        [[nodiscard]] bool isCameraAbove(Position value) const {
+        [[nodiscard]] bool isCameraAbove(const Position& value) const {
             return cameraPosition.isAbove(value);
         }
+
+        void adjustCameraPosition(const Position& position);
 
         [[nodiscard]] float getY() const {
             return cameraPosition.y;
         }
 
-        [[nodiscard]] RenderObject adjustToScreen(RenderObject renderObject) const {
+        [[nodiscard]] RenderObject adjustToScreen(const RenderObject &renderObject) const {
             Position onScreenPosition = transformToOnScreenPosition(renderObject.getPosition());
             return {
                     onScreenPosition.x,
@@ -37,11 +39,12 @@ namespace DoodleJumpGame {
 
     private:
         Position cameraPosition;
+        float maxCameraHeight = 0.0f;
         float aspectRatio = 1.0f;
         float worldViewHeight = 100.0f;
 
 
-        [[nodiscard]] Position transformToOnScreenPosition(Position worldPos) const {
+        [[nodiscard]] Position transformToOnScreenPosition(const Position &worldPos) const {
             float relativeY = worldPos.y - cameraPosition.y;
 
             float screenY = (relativeY / (worldViewHeight * 0.5f)) + GameConstants::CAMERA_OFFSET_Y;

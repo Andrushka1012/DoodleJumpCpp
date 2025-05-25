@@ -26,7 +26,7 @@ namespace DoodleJumpGame {
             return y > value;
         }
 
-        [[nodiscard]] bool isAbove(Position value) const {
+        [[nodiscard]] bool isAbove(const Position& value) const {
             return isAbove(value.y);
         }
     };
