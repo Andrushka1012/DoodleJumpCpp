@@ -62,7 +62,7 @@ namespace DoodleJumpGame {
         float normalizedOffset = screenController.normalizeCameraY();
         player.normalizeY(normalizedOffset);
 
-        for (Platform& platform: platforms) {
+        for (Platform &platform: platforms) {
             platform.normalizeY(normalizedOffset);
         }
     }
@@ -73,7 +73,7 @@ namespace DoodleJumpGame {
         float deltaTime = calculateDeltaTime();
         player.update(deltaTime);
 
-        for (Platform& platform: platforms) {
+        for (Platform &platform: platforms) {
             platform.update(deltaTime);
 
             if (platform.isVisible && platform.isColliding(player) && player.isFalling()) {
@@ -88,12 +88,19 @@ namespace DoodleJumpGame {
     }
 
     void Engine::removeInvisibleObjects() {
-        // TODO: Implement logic to remove platforms that are no longer visible on camera or isVisible = false
-
         if (player.getPosition().isBelow(screenController.getY() - GameConstants::PLAYER_END_OF_GAME_FALLING_OFFSET)) {
             onGameOverCallback(screenController.getMaxCameraHeightRecord() * 10.0f);
             return;
         }
+
+        float cameraBottom = screenController.getY() + GameConstants::CAMERA_REMOVE_OBJECT_OFFSET_Y;
+        platforms.erase(
+                std::remove_if(platforms.begin(), platforms.end(),
+                               [cameraBottom](const Platform &platform) {
+                                   return platform.getPosition().y < cameraBottom;
+                               }),
+                platforms.end()
+        );
     }
 
     void Engine::drawObjects() {
