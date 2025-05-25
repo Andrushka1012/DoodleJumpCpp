@@ -2,6 +2,7 @@
 
 #include "renderer.h"
 #include "renderable.h"
+#include "camera.h"
 
 namespace DoodleJumpGame {
     class Player final : public Renderable {  // final = "sealed class"

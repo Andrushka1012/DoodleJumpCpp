@@ -2,7 +2,6 @@
 
 #include "position.h"
 
-
 namespace DoodleJumpGame {
     class Camera {
     public:
@@ -11,6 +10,7 @@ namespace DoodleJumpGame {
         Camera(float startY)
                 : cameraPosition(0, startY) {}
 
+        void setAspectRatio(float ratio) { aspectRatio = ratio; }
 
         [[nodiscard]] bool isAbove(float value) const {
             return cameraPosition.isAbove(value);
@@ -31,18 +31,16 @@ namespace DoodleJumpGame {
             };
         }
 
-
         float transformToOnScreenWidth(float size) {
-            return size / 200;
+            return size / (200.0f * aspectRatio);
         }
 
         float transformToOnScreenHeight(float size) {
-            return size / 400;
+            return size / 200.0f;
         }
 
     private:
         Position cameraPosition;
+        float aspectRatio = 1.0f;
     };
-
-
 }
