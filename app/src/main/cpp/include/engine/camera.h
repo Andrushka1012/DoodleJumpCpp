@@ -2,6 +2,7 @@
 
 #include "position.h"
 #include "constants.h"
+#include "render-object.h"
 
 namespace DoodleJumpGame {
     class Camera {
@@ -23,6 +24,23 @@ namespace DoodleJumpGame {
             return cameraPosition.y;
         }
 
+        [[nodiscard]] RenderObject adjustToScreen(RenderObject renderObject) const {
+            Position onScreenPosition = transformToOnScreenPosition(renderObject.getPosition());
+            return {
+                    onScreenPosition.x,
+                    onScreenPosition.y,
+                    transformToOnScreenWidth(renderObject.width),
+                    transformToOnScreenHeight(renderObject.height),
+                    renderObject.color
+            };
+        }
+
+    private:
+        Position cameraPosition;
+        float aspectRatio = 1.0f;
+        float worldViewHeight = 100.0f;
+
+
         [[nodiscard]] Position transformToOnScreenPosition(Position worldPos) const {
             float relativeY = worldPos.y - cameraPosition.y;
 
@@ -39,10 +57,5 @@ namespace DoodleJumpGame {
         [[nodiscard]] float transformToOnScreenHeight(float height) const {
             return height / (worldViewHeight * 0.5f) * aspectRatio;
         }
-
-    private:
-        Position cameraPosition;
-        float aspectRatio = 1.0f;
-        float worldViewHeight = 100.0f;  // Высота видимой области в игровых единицах
     };
 }

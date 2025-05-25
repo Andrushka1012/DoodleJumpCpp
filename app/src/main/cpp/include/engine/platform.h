@@ -11,7 +11,7 @@ namespace DoodleJumpGame {
         explicit Platform(float startX = 0, float startY = 0)
                 : Renderable(startX, startY, GameConstants::PLATFORM_WIDTH, GameConstants::PLATFORM_HEIGHT) {}
 
-        void renderOn(Renderer *render, Camera camera) const override;
+        [[nodiscard]] RenderObject getRenderObject() const override;
 
         void update(float deltaTime) override;
 

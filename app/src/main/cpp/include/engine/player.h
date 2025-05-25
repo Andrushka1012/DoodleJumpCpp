@@ -11,7 +11,7 @@ namespace DoodleJumpGame {
         Player(float startX = 0, float startY = 0)
                 : Renderable(startX, startY, GameConstants::PLAYER_WIDTH, GameConstants::PLAYER_HEIGHT) {}
 
-        void renderOn(Renderer *render, Camera camera) const override;
+        RenderObject getRenderObject() const override;
 
         void update(float deltaTime) override;
 

@@ -2,6 +2,7 @@
 
 #include <array>
 #include <GLES2/gl2.h>
+#include "render-object.h"
 
 // Forward declaration for GLuint (Android NDK provides typedef)
 using GLuint = unsigned int;
@@ -42,7 +43,9 @@ namespace DoodleJumpGame {
         void resetTransform();
 
         // Primitive draw calls
-        void drawQuad() const;   // 4-вершинный квадрат (TRIANGLE_FAN)
+        void drawQuad() const;
+
+        void draw(RenderObject renderObject);
 
         [[nodiscard]] bool isInitialized() const { return isValid; }
 
