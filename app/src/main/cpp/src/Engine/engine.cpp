@@ -26,16 +26,16 @@ namespace DoodleJumpGame {
         player = Player(0.0f, 0.0f);
         screenController.reset();
 
-
-        platforms.emplace_back(0.0f, 0.0);
-        platforms.emplace_back(0.5f, 0.1);
-        platforms.emplace_back(-0.5f, 0.4);
-        platforms.emplace_back(0.5f, 0.6);
-        platforms.emplace_back(-0.5f, 0.8);
-        platforms.emplace_back(0.5f, 1.0);
-        platforms.emplace_back(-0.5f, 1.2);
-        platforms.emplace_back(0.5f, 1.4);
-        platforms.emplace_back(-0.5f, 1.6);
+        platforms.clear();
+        platforms.emplace_back(0.0f, 0.0, PlatformType::Normal);
+        platforms.emplace_back(0.5f, 0.1, PlatformType::Crumbling);
+        platforms.emplace_back(-0.5f, 0.4, PlatformType::Moving, 1);
+        platforms.emplace_back(0.5f, 0.6, PlatformType::Falling);
+        platforms.emplace_back(-0.5f, 0.8, PlatformType::Normal);
+        platforms.emplace_back(0.5f, 1.0, PlatformType::Crumbling);
+        platforms.emplace_back(-0.5f, 1.2, PlatformType::Normal);
+        platforms.emplace_back(0.5f, 1.4, PlatformType::Normal);
+        platforms.emplace_back(-0.5f, 1.6, PlatformType::Crumbling);
     }
 
     void Engine::setViewport(int width, int height) {
@@ -68,12 +68,12 @@ namespace DoodleJumpGame {
         float deltaTime = calculateDeltaTime();
         player.update(deltaTime);
 
-        if (player.isFalling()) {
-            for (const auto &platform: platforms) {
-                if (platform.isColliding(player)) {
-                    player.jump();
-                    break; // Exit loop after first collision
-                }
+        for (Platform& platform: platforms) {
+            platform.update(deltaTime);
+
+            if (platform.isVisible && platform.isColliding(player) && player.isFalling()) {
+                player.jump();
+                platform.touch();
             }
         }
 
@@ -83,7 +83,7 @@ namespace DoodleJumpGame {
     }
 
     void Engine::removeInvisibleObjects() {
-        // TODO: Implement logic to remove platforms that are no longer visible
+        // TODO: Implement logic to remove platforms that are no longer visible on camera or isVisible = false
 
         if (player.getPosition().isBelow(screenController.getY() - GameConstants::PLAYER_END_OF_GAME_FALLING_OFFSET)) {
             onGameOverCallback(screenController.getMaxCameraHeightRecord() * 10.0f);
@@ -96,7 +96,9 @@ namespace DoodleJumpGame {
             renderer->clear(0.0f, 0.0f, 0.0f, 1.0f);
 
             for (const Platform &platform: platforms) {
-                draw(platform);
+                if (platform.isVisible) {
+                    draw(platform);
+                }
             }
 
             draw(player);
