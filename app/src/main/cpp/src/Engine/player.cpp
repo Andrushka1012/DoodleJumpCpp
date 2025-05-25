@@ -19,4 +19,8 @@ namespace DoodleJumpGame {
     void Player::jump() {
         velocityY = GameConstants::PLAYER_JUMP_FORCE;
     }
+
+    void Player::normalizeY(float offset) {
+        setY(getY() - offset);
+    }
 }

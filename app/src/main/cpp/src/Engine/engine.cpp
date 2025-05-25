@@ -59,7 +59,12 @@ namespace DoodleJumpGame {
     }
 
     void Engine::normalizeYPosition() {
-        // TODO: Implement Y position normalization logic
+        float normalizedOffset = screenController.normalizeCameraY();
+        player.normalizeY(normalizedOffset);
+
+        for (Platform& platform: platforms) {
+            platform.normalizeY(normalizedOffset);
+        }
     }
 
     void Engine::updateGamePosition() {

@@ -25,7 +25,7 @@ namespace DoodleJumpGame {
         void onHorizontalMove(float x);
 
     private:
-        static constexpr float Y_NORMALIZE_THRESHOLD = 1.0f;
+        static constexpr float Y_NORMALIZE_THRESHOLD = 1000.0f;
 
         std::chrono::steady_clock::time_point lastFrameTime;
 

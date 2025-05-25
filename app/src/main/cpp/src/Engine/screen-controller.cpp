@@ -22,5 +22,14 @@ namespace DoodleJumpGame {
     void Camera::reset(){
         cameraPosition  = Position(0, 0);
         maxCameraHeight = 0.0f;
+        normalisedHeight = 0.0f;
+    }
+
+    float Camera::normalizeCameraY() {
+        float currentY = cameraPosition.y;
+        cameraPosition.y = 0;
+        normalisedHeight += currentY;
+
+        return currentY;
     }
 }
