@@ -39,6 +39,10 @@ namespace DoodleJumpGame {
 
         void reset();
 
+        [[nodiscard]] float getMaxCameraHeightRecord() const {
+            return maxCameraHeight;
+        }
+
     private:
         Position cameraPosition;
         float maxCameraHeight = 0.0f;

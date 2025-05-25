@@ -3,6 +3,7 @@ package com.example.learncpp
 import android.annotation.SuppressLint
 import android.opengl.GLSurfaceView
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -43,7 +44,7 @@ class MainActivity : ComponentActivity() {
         fun getInstance(): MainActivity? = instance
 
         @JvmStatic
-        fun notifyGameOverFromNative(score: Int) {
+        fun notifyGameOver(score: Float) {
             instance?.runOnUiThread {
                 instance?.onGameOver(score)
             }
@@ -158,7 +159,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    fun onGameOver(score: Int) {
-        // TODO: обработай окончание игры (например, покажи меню, сохрани результат)
+    fun onGameOver(score: Float) {
+        Log.d("qwe", "Game Over! Score: $score")
     }
 }

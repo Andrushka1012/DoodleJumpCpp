@@ -2,13 +2,14 @@
 #include "engine/renderer.h"
 #include "engine/player.h"
 #include <memory>
+#include <chrono>
 
 namespace DoodleJumpGame {
     // Global renderer instance for JNI compatibility
     std::unique_ptr<Engine> g_engine;
 
-    Engine::Engine(std::unique_ptr<Renderer> renderer)
-            : renderer(std::move(renderer)) {
+    Engine::Engine(std::unique_ptr<Renderer> renderer, GameOverCallback callback)
+            : renderer(std::move(renderer)), onGameOverCallback(std::move(callback)) {
     }
 
     Engine::~Engine() = default; // Or define custom cleanup logic if necessary
@@ -85,8 +86,7 @@ namespace DoodleJumpGame {
         // TODO: Implement logic to remove platforms that are no longer visible
 
         if (player.getPosition().isBelow(screenController.getY() - GameConstants::PLAYER_END_OF_GAME_FALLING_OFFSET)) {
-            // If player falls below the screen, reset the game
-            startGame();
+            onGameOverCallback(screenController.getMaxCameraHeightRecord() * 100.0f);
             return;
         }
     }
@@ -132,10 +132,10 @@ namespace DoodleJumpGame {
     }
 
     // C-style API implementation
-    void startEngine() {
+    void startEngine(const GameOverCallback &onGameOverCallback) {
         if (!g_engine) {
             auto renderer = std::make_unique<Renderer>();
-            g_engine = std::make_unique<Engine>(std::move(renderer));
+            g_engine = std::make_unique<Engine>(std::move(renderer), onGameOverCallback);
             g_engine->launch();
         }
     }

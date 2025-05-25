@@ -7,11 +7,14 @@
 #include "platform.h"
 #include "game-object.h"
 #include <vector>
+#include <functional>
 
 namespace DoodleJumpGame {
+    using GameOverCallback = std::function<void(float)>;
+
     class Engine {
     public:
-        explicit Engine(std::unique_ptr<Renderer> renderer);
+        explicit Engine(std::unique_ptr<Renderer> renderer, GameOverCallback callback);
 
         ~Engine();
 
@@ -27,6 +30,7 @@ namespace DoodleJumpGame {
         std::chrono::steady_clock::time_point lastFrameTime;
 
         std::unique_ptr<Renderer> renderer;
+        GameOverCallback onGameOverCallback;
         Player player;
         Camera screenController;
         std::vector<Platform> platforms;
@@ -40,7 +44,7 @@ namespace DoodleJumpGame {
     };
 
     // C-style API for JNI compatibility
-    void startEngine();
+    void startEngine(const GameOverCallback& onGameOverCallback);
 
     void drawFrame();
 

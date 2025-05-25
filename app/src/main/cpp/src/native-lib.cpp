@@ -9,11 +9,39 @@
 
 using std::string;
 
+JavaVM* g_javaVM = nullptr;  // Global variable
+
+jint JNI_OnLoad(JavaVM* vm, void* reserved) {
+    g_javaVM = vm;  // Store the JavaVM pointer for later use
+    return JNI_VERSION_1_6;
+}
+
+void notifyGameOver(float score) {
+    if (!g_javaVM) return;  // safety check
+
+    JNIEnv* env = nullptr;
+    jint result = g_javaVM->AttachCurrentThread(&env, nullptr);
+    if (result != JNI_OK || env == nullptr) return;
+
+    jclass clazz = env->FindClass("com/example/learncpp/MainActivity");
+    if (!clazz) return;
+
+    jmethodID methodId = env->GetStaticMethodID(clazz, "notifyGameOver", "(F)V");
+    if (!methodId) return;
+
+    env->CallStaticVoidMethod(clazz, methodId, score);
+}
+
 extern "C" JNIEXPORT void JNICALL
 Java_com_example_learncpp_MainActivity_startEngine(
         JNIEnv *env,
         jobject /* this */) {
-    DoodleJumpGame::startEngine();
+
+    auto onGameOverCallback = [](float score) {
+        notifyGameOver(score);
+    };
+
+    DoodleJumpGame::startEngine(onGameOverCallback);
 }
 
 extern "C" JNIEXPORT void JNICALL
