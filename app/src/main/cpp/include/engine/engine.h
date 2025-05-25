@@ -33,6 +33,7 @@ namespace DoodleJumpGame {
         void initializeGame();
         void normalizeYPosition();
         void updateGamePosition();
+        void removeInvisibleObjects();
         void drawObjects();
         void draw(const GameObject &renderable);
         float calculateDeltaTime();

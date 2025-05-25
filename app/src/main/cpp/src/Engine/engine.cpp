@@ -25,6 +25,7 @@ namespace DoodleJumpGame {
         player = Player(0.0f, 0.0f);
         screenController = Camera(0.0f, GameConstants::WORLD_HEIGHT);
 
+        platforms.emplace_back(0.0f, 0.0);
         platforms.emplace_back(0.5f, 0.1);
         platforms.emplace_back(-0.5f, 0.4);
         platforms.emplace_back(0.5f, 0.6);
@@ -60,10 +61,10 @@ namespace DoodleJumpGame {
     }
 
     void Engine::updateGamePosition() {
+        removeInvisibleObjects();
+
         float deltaTime = calculateDeltaTime();
-
         player.update(deltaTime);
-
 
         if (player.isFalling()) {
             for (const auto &platform: platforms) {
@@ -75,10 +76,12 @@ namespace DoodleJumpGame {
         }
 
 
-        if (screenController.isCameraAbove(player.getPosition())) {
-            player.jump();
-        }
+        screenController.adjustCameraPosition(player.getPosition());
 
+    }
+
+    void Engine::removeInvisibleObjects() {
+        // TODO: Implement logic to remove platforms that are no longer visible
     }
 
     void Engine::drawObjects() {
