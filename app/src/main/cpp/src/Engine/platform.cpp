@@ -11,6 +11,8 @@ namespace DoodleJumpGame {
             case PlatformType::Moving:
                 if (getX() < -0.8 || getX() > 0.8) {
                     velocity *= -1;
+                    setXWithBoundaryClamp(getX() + GameConstants::PLATFORM_MOVING_SPEED * velocity * deltaTime * 5);
+                    return;
                 }
                 setXWithBoundaryClamp(getX() + GameConstants::PLATFORM_MOVING_SPEED * velocity * deltaTime);
                 break;
