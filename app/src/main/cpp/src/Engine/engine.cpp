@@ -104,19 +104,25 @@ namespace DoodleJumpGame {
         int required = desiredPlatformCount();
         if (platforms.size() >= required) return;
 
+        float difficultyCoef =
+                (float) (GameConstants::BASE_PLATFORM_AMOUNT - required) /
+                (GameConstants::BASE_PLATFORM_AMOUNT - GameConstants::MINIMAL_PLATFORM_AMOUNT);
+        difficultyCoef = std::clamp(difficultyCoef, 0.25f, 1.0f);
+
         while (platforms.size() < required) {
             float newX = randomFloat(-0.9f, 0.9f);  // Clean horizontal range
 
-            float gap = randomFloat(GameConstants::MIN_PLATFORM_GAP, GameConstants::MAX_PLATFORM_GAP);
+            float baseGap = randomFloat(GameConstants::MIN_PLATFORM_GAP, GameConstants::MAX_PLATFORM_GAP);
+            float gap = baseGap * difficultyCoef;
             float newY = highestPlatformY + gap;
 
             // Make sure newY is slightly *above* the visible screen
-            float screenTopY = screenController.getCameraY();
-            if (screenController.getCameraY() > GameConstants::WORLD_HEIGHT) {
-                screenTopY += GameConstants::WORLD_HEIGHT;
-            }
-
-            newY = std::max(newY, screenTopY + 0.05f);  // Only push up if it's still inside the screen
+//            float screenTopY = screenController.getCameraY();
+//            if (screenController.getCameraY() > GameConstants::WORLD_HEIGHT * ) {
+//                screenTopY += GameConstants::WORLD_HEIGHT;
+//            }
+//
+//            newY = std::max(newY, screenTopY + 0.05f);  // Only push up if it's still inside the screen
 
             auto type = getRandomPlatformType();
             float offset = 0;
@@ -135,10 +141,9 @@ namespace DoodleJumpGame {
 
 
     int Engine::desiredPlatformCount() const {
-        float heightFactor = screenController.getMaxCameraHeightRecord() * 10; // Remove each 1 after one screen height units
+        float heightFactor = screenController.getMaxCameraHeightRecord() * 2; // Remove 2 after one screen height units
 
-        GameConstants::BASE_PLATFORM_AMOUNT - static_cast<int>(heightFactor * 5);
-        return std::max(static_cast<int>(GameConstants::BASE_PLATFORM_AMOUNT - heightFactor * 5), GameConstants::MINIMAL_PLATFORM_AMOUNT);
+        return std::max(static_cast<int>(GameConstants::BASE_PLATFORM_AMOUNT - heightFactor), GameConstants::MINIMAL_PLATFORM_AMOUNT);
     }
 
     PlatformType Engine::getRandomPlatformType() {
