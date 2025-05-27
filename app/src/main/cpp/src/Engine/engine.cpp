@@ -29,6 +29,7 @@ namespace DoodleJumpGame {
 
         highestPlatformY = 0.0f;
         platforms.clear();
+        items.clear();
         platforms.emplace_back(0.0f, 0.0, PlatformType::Normal); // Start with a single platform at the center
         spawnPlatforms();
     }
@@ -79,6 +80,12 @@ namespace DoodleJumpGame {
             }
         }
 
+        for (Item &item: items) {
+            if (item.isVisible && item.isColliding(player)) {
+                item.interact(player);
+            }
+        }
+
 
         screenController.adjustCameraPosition(player.getPosition());
 
@@ -98,6 +105,13 @@ namespace DoodleJumpGame {
                                }),
                 platforms.end()
         );
+        items.erase(
+                std::remove_if(items.begin(), items.end(),
+                               [cameraBottom](const Item &item) {
+                                   return item.getPosition().y < cameraBottom;
+                               }),
+                items.end()
+        );
     }
 
     void Engine::spawnPlatforms() {
@@ -111,18 +125,17 @@ namespace DoodleJumpGame {
 
         while (platforms.size() < required) {
             float newX = randomFloat(-0.9f, 0.9f);  // Clean horizontal range
-
             float baseGap = randomFloat(GameConstants::MIN_PLATFORM_GAP, GameConstants::MAX_PLATFORM_GAP);
             float gap = baseGap * difficultyCoef;
             float newY = highestPlatformY + gap;
 
-            // Make sure newY is slightly *above* the visible screen
-//            float screenTopY = screenController.getCameraY();
-//            if (screenController.getCameraY() > GameConstants::WORLD_HEIGHT * ) {
-//                screenTopY += GameConstants::WORLD_HEIGHT;
-//            }
-//
-//            newY = std::max(newY, screenTopY + 0.05f);  // Only push up if it's still inside the screen
+
+            float itemChance = randomFloat(0.0f, 1.0f);
+            if (itemChance > GameConstants::CHANGE_TO_SPAWN_BONUS && screenController.isCameraAbove(2.0f)) {
+                ItemType itemType = randomBool() ? ItemType::Rocket : ItemType::BlackHole;
+                items.emplace_back(newX, newY, itemType);
+                continue;
+            }
 
             auto type = getRandomPlatformType();
             float offset = 0;
@@ -154,9 +167,16 @@ namespace DoodleJumpGame {
     }
 
     bool Engine::isOverlapping(const Platform &newPlatform) const {
-        return std::any_of(platforms.begin(), platforms.end(), [&](const Platform &platform) {
+        bool isOverlappingPlatforms = std::any_of(platforms.begin(), platforms.end(), [&](const Platform &platform) {
             return platform.isColliding(newPlatform);
         });
+
+        bool isOverlappingItems = std::any_of(items.begin(), items.end(), [&](const Item &item) {
+            return item.isColliding(newPlatform);
+        });
+
+
+        return isOverlappingPlatforms || isOverlappingItems;
     }
 
     void Engine::drawObjects() {
@@ -166,6 +186,12 @@ namespace DoodleJumpGame {
             for (const Platform &platform: platforms) {
                 if (platform.isVisible) {
                     draw(platform);
+                }
+            }
+
+            for (const Item &item: items) {
+                if (item.isVisible) {
+                    draw(item);
                 }
             }
 
