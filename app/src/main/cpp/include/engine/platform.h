@@ -31,8 +31,6 @@ namespace DoodleJumpGame {
 
         [[nodiscard]] PlatformType getType() const { return type; }
 
-        void normalizeY(float offset);
-
     private:
         PlatformType type;
         float velocity = 0.0f;

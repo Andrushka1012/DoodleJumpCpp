@@ -5,6 +5,7 @@
 #include "player.h"
 #include "screen-controller.h"
 #include "platform.h"
+#include "item.h"
 #include "game-object.h"
 #include <vector>
 #include <functional>
@@ -34,6 +35,7 @@ namespace DoodleJumpGame {
         Player player;
         Camera screenController;
         std::vector<Platform> platforms;
+        std::vector<Item> items;
         float highestPlatformY = 0.0f;
 
         void normalizeYPosition();

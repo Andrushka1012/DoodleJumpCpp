@@ -49,8 +49,4 @@ namespace DoodleJumpGame {
         }
     }
 
-    void Platform::normalizeY(float offset) {
-        setY(getY() - offset);
-    }
-
 }

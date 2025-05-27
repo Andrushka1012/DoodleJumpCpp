@@ -18,17 +18,23 @@ namespace DoodleJumpGame {
         void jump();
 
         void setHorizontalMovement(float value) {
-            horizontalMovement = value;
+            if (isAlive) {
+                horizontalMovement = value;
+            }
         }
 
         bool isFalling() const {
             return velocityY <= 0.0f;
         }
 
-        void normalizeY(float offset);
+        void death();
+
+        void takeRocket();
 
     private:
         float velocityY = 0.0f;
         float horizontalMovement = 0.0f;
+        bool isAlive = true;
+        float rocketTime = 0.0f;
     };
 }

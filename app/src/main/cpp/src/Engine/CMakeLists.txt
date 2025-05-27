@@ -5,6 +5,7 @@ add_library(Engine STATIC
         screen-controller.cpp
         platform.cpp
         game-object.cpp
+        item.cpp
 )
 
 target_include_directories(Engine PUBLIC ../../include)

@@ -32,6 +32,10 @@ namespace DoodleJumpGame {
 
         [[nodiscard]] bool isColliding(const GameObject &other) const;
 
+        void normalizeY(float offset) {
+            setY(getY() - offset);
+        }
+
     protected:
         GameObject(float x, float y, float width, float height)
                 : position(x, y), width(width), height(height) {}
